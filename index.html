@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Tentate · Sin gluten, sin azúcar, sin culpa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Archivo:wght@400;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   ⚙️ PARA FER: ACÁ SE CARGAN LOS PRODUCTOS
+   Cada producto va entre { }. Copiá un bloque, pegalo antes del
+   cierre "]" y cambiá los datos. No hace falta tocar nada más.
+   tags acepta: "gluten", "azucar", o ambos ["gluten","azucar"]
+   img: ruta a la foto del producto (misma carpeta img/ del repo)
+   ============================================================ */
+</style>
+</head>
+<body>
+
+<!-- HEADER estilo cartel de almacén -->
+<header class="shop-header">
+  <a href="https://wa.me/59896190002?text=Hola!%20Quer%C3%ADa%20consultar%20sobre%20productos%20sin%20gluten%20o%20sin%20az%C3%BAcar"
+     class="consult-link" target="_blank" rel="noopener">💬 Consultas</a>
+  <div class="stamp-mark">100% SIN TACC · SIN AZÚCAR</div>
+  <h1>TENTATE<span>!</span></h1>
+  <p class="subtitle">Sin gluten, sin azúcar, sin culpa</p>
+  <a href="https://pelsas-distribuidora.pages.dev" target="_blank" rel="noopener" class="provenance">
+    Seleccionado y distribuido por PelSAS ↗
+  </a>
+</header>
+
+<!-- TABS estilo fichero -->
+<nav class="tabs" id="tabs"></nav>
+
+<!-- GRID DE FICHAS -->
+<main class="grid" id="grid"></main>
+
+<!-- INSTRUCCIONES para gente no técnica -->
+<section class="howto">
+  <div class="howto-card">
+    <span class="howto-num">①</span>
+    <p>Elegí las cajas que querés y tocá "Agregar"</p>
+  </div>
+  <div class="howto-card">
+    <span class="howto-num">②</span>
+    <p>Sumá todo lo que necesites, podés cambiar cantidades</p>
+  </div>
+  <div class="howto-card">
+    <span class="howto-num">③</span>
+    <p>Tocá "Ver pedido" y enviá por WhatsApp con un solo botón</p>
+  </div>
+</section>
+
+<footer class="foot">
+  <p>Un servicio de <a href="https://pelsas-distribuidora.pages.dev" target="_blank" rel="noopener" class="foot-link">PelSAS Distribuidora</a> — Montevideo</p>
+</footer>
+
+<!-- BARRA DE CARRITO FLOTANTE -->
+<div class="cart-bar" id="cartBar">
+  <div class="cart-bar-info">
+    <span class="cart-bar-count" id="cartCount">0</span>
+    <span class="cart-bar-total" id="cartTotal">$0</span>
+  </div>
+  <button class="cart-bar-btn" id="openCartBtn">Ver pedido ▸</button>
+</div>
+
+<!-- MODAL "MI PEDIDO" estilo ticket -->
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-ticket">
+    <div class="ticket-head">
+      <span>MI PEDIDO</span>
+      <button class="ticket-close" id="closeCartBtn">✕</button>
+    </div>
+    <div class="ticket-body" id="ticketBody"></div>
+    <div class="ticket-total">
+      <span>Total</span>
+      <span id="ticketTotal">$0</span>
+    </div>
+    <a href="#" id="sendOrderBtn" class="send-order-btn" target="_blank" rel="noopener">
+      Enviar pedido por WhatsApp
+    </a>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   📦 LISTA DE PRODUCTOS — EDITÁ ACÁ
+   ============================================================ */
+const WHATSAPP_NUMBER = "59896190002";
+
+const PRODUCTS = [
+  { name: "Rebozador clásico", unitPrice: 134, boxPrice: 1608, unitsPerBox: 12, tags: ["gluten"], img: "img/4830.webp", desc: "Caja x 12 350g" },
+  { name: "Rebozador gourmet crocante", unitPrice: 148, boxPrice: 1776, unitsPerBox: 12, tags: ["gluten"], img: "img/4831.webp", desc: "Caja x 12 350g" },
+  { name: "Rebozador crocante saborizado", unitPrice: 148, boxPrice: 1776, unitsPerBox: 12, tags: ["gluten"], img: "img/4832.webp", desc: "Caja x 12 350g" },
+  { name: "Pan de molde blanco sin gluten", unitPrice: 229, boxPrice: 1832, unitsPerBox: 8, tags: ["gluten"], img: "img/6674.webp", desc: "Caja x 8 350g" },
+  { name: "Budín vainilla sin gluten", unitPrice: 195, boxPrice: 2340, unitsPerBox: 12, tags: ["gluten"], img: "img/6675.webp", desc: "Caja x 12 250g" },
+  { name: "Budín de limón sin gluten", unitPrice: 195, boxPrice: 2340, unitsPerBox: 12, tags: ["gluten"], img: "img/6676.webp", desc: "Caja x 12 250g" },
+  { name: "Bizcochuelo vainilla sin gluten", unitPrice: 59, boxPrice: 708, unitsPerBox: 12, tags: ["gluten"], img: "img/10635.webp", desc: "Caja x 12 200g" },
+  { name: "Alfajor maicena s/gluten", unitPrice: 56.9, boxPrice: 682.8, unitsPerBox: 12, tags: ["gluten"], img: "img/2132.webp", desc: "Display x 12u 70g" },
+  { name: "Alfajor bañado c/chocolate s/gluten", unitPrice: 64, boxPrice: 768, unitsPerBox: 12, tags: ["gluten"], img: "img/2130.webp", desc: "Display x 12u 80g" },
+  { name: "Alfajor membrillo s/lactosa y s/gluten", unitPrice: 48.6, boxPrice: 583.2, unitsPerBox: 12, tags: ["gluten"], img: "img/2134.webp", desc: "Display x 12u 70g" },
+  { name: "Bombita dulce de leche bañado chocolate", unitPrice: 21, boxPrice: 504, unitsPerBox: 24, tags: ["gluten"], img: "img/6621.webp", desc: "Display x 24u 30g" },
+  { name: "Alfajor maizena s/glúten 70gr", unitPrice: 59.5, boxPrice: 357, unitsPerBox: 6, tags: ["gluten"], img: "img/2180.webp", desc: "CAJA X 6 U. 70GR" },
+  { name: "Alfajor bañado c/chocolate s/gluten", unitPrice: 66, boxPrice: 396, unitsPerBox: 6, tags: ["gluten"], img: "img/2178.webp", desc: "CAJA X 6 U. 70GR" },
+  { name: "Alfajor bañado c/choc blanco s/gluten", unitPrice: 64, boxPrice: 768, unitsPerBox: 12, tags: ["gluten"], img: "img/2128.webp", desc: "Display x 12u 70g" },
+  { name: "Alfajor bañado c/choc blanco s/gluten", unitPrice: 66, boxPrice: 396, unitsPerBox: 6, tags: ["gluten"], img: "img/2179.webp", desc: "CAJA X 6 U. 70GR" },
+  { name: "Alfajor membrillo s/lactosa y s/gluten", unitPrice: 51, boxPrice: 306, unitsPerBox: 6, tags: ["gluten"], img: "img/2181.webp", desc: "CAJA X 6 U. 70GR" },
+  { name: "Budín Marmolado Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3838.webp", desc: "Caja x 10" },
+  { name: "Budín Coco Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/4037.webp", desc: "Caja x 10" },
+  { name: "Budín Chocolate Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3837.webp", desc: "Caja x 10" },
+  { name: "Budín Naranja Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3839.webp", desc: "Caja x 10" },
+  { name: "Alfajor de Semillas y Frutos Secos (Proteico)", unitPrice: 62.5, boxPrice: 500, unitsPerBox: 8, tags: ["azucar"], img: "img/1010.webp", desc: "caja x 8 u." },
+  { name: "Galletas Smams Chips Chocolate SIN AZÚCAR 150g", unitPrice: 144, boxPrice: 3456, unitsPerBox: 24, tags: ["azucar"], img: "img/4781.webp", desc: "Caja x 24u" },
+  { name: "Galletas Smams Chips Chocolate SIN GLUTEN 150g", unitPrice: 110.5, boxPrice: 2652, unitsPerBox: 24, tags: ["gluten"], img: "img/4661.webp", desc: "Caja x 24u" },
+  { name: "Galletas Smams Chocolate Rellena Vainilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4665.webp", desc: "Caja x 18u" },
+  { name: "Galletas Smams Crackers Clásica SIN GLUTEN 150g", unitPrice: 105, boxPrice: 1890, unitsPerBox: 18, tags: ["gluten"], img: "img/4662.webp", desc: "Caja x 18u" },
+  { name: "Galletas Smams Rellena Vainilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4659.webp", desc: "Caja x 18u" },
+  { name: "Galletas Smams Rellenas Frutilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4660.webp", desc: "Caja x 18u" },
+  { name: "Polvorón Smams vainilla SIN AZÚCAR 115g", unitPrice: 109, boxPrice: 2616, unitsPerBox: 24, tags: ["azucar"], img: "img/4783.webp", desc: "Caja x 24u" },
+  { name: "Barra cereales Frutos Secos 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3541.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Coco 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3551.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Chocolate 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3540.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Semillas 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3543.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Goji y Cranberry 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3586.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Proteínas Veganas 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3965.webp", desc: "Caja x 12u" },
+  { name: "Barra cereales Frutilla y Choco Blanco 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3992.webp", desc: "Caja x 12u" }
+];
+
+/* ============================================================
+   Lógica de armado — no hace falta tocar de acá para abajo
+   ============================================================ */
+const TAG_LABELS = {
+  gluten: { label: "Sin Gluten", cls: "stamp-green" },
+  azucar: { label: "Sin Azúcar", cls: "stamp-red" }
+};
+
+const FILTERS = [
+  { key: "todos", label: "Todos" },
+  { key: "gluten", label: "Sin Gluten" },
+  { key: "azucar", label: "Sin Azúcar" }
+];
+
+let activeFilter = "todos";
+let cart = {}; // { "Nombre del producto": cantidadDeCajas }
+
+/* Recupera el carrito si el navegador lo guardó (por si recargan la página sin querer) */
+try {
+  const saved = localStorage.getItem("pelsas_cart");
+  if (saved) cart = JSON.parse(saved);
+} catch (e) { /* si falla, arrancamos con carrito vacío */ }
+
+function saveCart() {
+  try { localStorage.setItem("pelsas_cart", JSON.stringify(cart)); } catch (e) {}
+}
+
+function findProduct(name) {
+  return PRODUCTS.find(p => p.name === name);
+}
+
+function addToCart(name) {
+  cart[name] = (cart[name] || 0) + 1;
+  saveCart();
+  renderGrid();
+  renderCart();
+}
+
+function changeQty(name, delta) {
+  const next = (cart[name] || 0) + delta;
+  if (next <= 0) {
+    delete cart[name];
+  } else {
+    cart[name] = next;
+  }
+  saveCart();
+  renderGrid();
+  renderCart();
+}
+
+function cartCount() {
+  return Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+function cartTotalPrice() {
+  return Object.entries(cart).reduce((sum, [name, qty]) => {
+    const p = findProduct(name);
+    return sum + (p ? p.boxPrice * qty : 0);
+  }, 0);
+}
+
+function renderCartBar() {
+  const count = cartCount();
+  document.getElementById("cartCount").textContent = count === 1 ? "1 caja" : `${count} cajas`;
+  document.getElementById("cartTotal").textContent = `$${cartTotalPrice()}`;
+  document.getElementById("cartBar").classList.toggle("visible", count > 0);
+}
+
+function renderCart() {
+  renderCartBar();
+  const body = document.getElementById("ticketBody");
+  const entries = Object.entries(cart);
+
+  if (entries.length === 0) {
+    body.innerHTML = `<p class="ticket-empty">Todavía no agregaste nada. Cerrá esta ventana y elegí tus productos.</p>`;
+  } else {
+    body.innerHTML = entries.map(([name, qty]) => {
+      const p = findProduct(name);
+      return `
+        <div class="ticket-row">
+          <img class="ticket-row-img" src="${p.img}" alt="${p.name}" loading="lazy">
+          <div class="ticket-row-info">
+            <span class="ticket-row-name">${p.name}</span>
+            <span class="ticket-row-sub">Caja x${p.unitsPerBox} · $${p.boxPrice} c/u</span>
+          </div>
+          <div class="ticket-row-qty">
+            <button class="qty-btn" data-name="${name}" data-delta="-1">−</button>
+            <span class="qty-value">${qty}</span>
+            <button class="qty-btn" data-name="${name}" data-delta="1">+</button>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    body.querySelectorAll(".qty-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        changeQty(btn.dataset.name, parseInt(btn.dataset.delta, 10));
+      });
+    });
+  }
+
+  document.getElementById("ticketTotal").textContent = `$${cartTotalPrice()}`;
+  document.getElementById("sendOrderBtn").href = buildWhatsAppOrderLink();
+}
+
+function buildWhatsAppOrderLink() {
+  const entries = Object.entries(cart);
+  if (entries.length === 0) {
+    return `https://wa.me/${WHATSAPP_NUMBER}`;
+  }
+  const lines = entries.map(([name, qty]) => {
+    const p = findProduct(name);
+    return `• ${p.name} — Caja x${p.unitsPerBox} · Cant: ${qty} · $${p.boxPrice * qty}`;
+  });
+  const msg = `Hola! Quiero hacer este pedido:\n\n${lines.join("\n")}\n\nTotal: $${cartTotalPrice()}`;
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+}
+
+function openCart() {
+  renderCart();
+  document.getElementById("cartOverlay").classList.add("visible");
+}
+
+function closeCart() {
+  document.getElementById("cartOverlay").classList.remove("visible");
+}
+
+function renderTabs() {
+  const nav = document.getElementById("tabs");
+  nav.innerHTML = FILTERS.map(f =>
+    `<button class="tab ${f.key === activeFilter ? 'active' : ''}" data-key="${f.key}">${f.label}</button>`
+  ).join("");
+  nav.querySelectorAll(".tab").forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeFilter = btn.dataset.key;
+      renderTabs();
+      renderGrid();
+    });
+  });
+}
+
+function renderGrid() {
+  const grid = document.getElementById("grid");
+  const filtered = activeFilter === "todos"
+    ? PRODUCTS
+    : PRODUCTS.filter(p => p.tags.includes(activeFilter));
+
+  grid.innerHTML = filtered.map((p, i) => {
+    const qty = cart[p.name] || 0;
+    return `
+    <article class="card" style="--delay:${i * 0.04}s">
+      <div class="card-photo">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <div class="stamps">
+          ${p.tags.map(t => `<span class="stamp ${TAG_LABELS[t].cls}">${TAG_LABELS[t].label}</span>`).join("")}
+        </div>
+      </div>
+      <h3 class="card-name">${p.name}</h3>
+      <p class="card-desc">${p.desc}</p>
+      <p class="unit-price">Precio unitario: <span>$${p.unitPrice}</span> <em>(informativo)</em></p>
+      <div class="card-bottom">
+        <div class="box-price-block">
+          <span class="box-label">Caja x${p.unitsPerBox}</span>
+          <span class="card-price">$${p.boxPrice}</span>
+        </div>
+        ${qty === 0
+          ? `<button class="order-btn" data-add="${p.name}">Agregar</button>`
+          : `<div class="card-stepper">
+               <button class="qty-btn" data-name="${p.name}" data-delta="-1">−</button>
+               <span class="qty-value">${qty}</span>
+               <button class="qty-btn" data-name="${p.name}" data-delta="1">+</button>
+             </div>`
+        }
+      </div>
+    </article>
+  `;
+  }).join("");
+
+  grid.querySelectorAll("[data-add]").forEach(btn => {
+    btn.addEventListener("click", () => addToCart(btn.dataset.add));
+  });
+  grid.querySelectorAll(".card-stepper .qty-btn").forEach(btn => {
+    btn.addEventListener("click", () => changeQty(btn.dataset.name, parseInt(btn.dataset.delta, 10)));
+  });
+}
+
+renderTabs();
+renderGrid();
+renderCart();
+
+document.getElementById("openCartBtn").addEventListener("click", openCart);
+document.getElementById("closeCartBtn").addEventListener("click", closeCart);
+document.getElementById("cartOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "cartOverlay") closeCart();
+});
+</script>
+
+<style>
+:root {
+  --kraft: #E4D9BE;
+  --kraft-dark: #D8CAA6;
+  --card-bg: #F4EDD9;
+  --ink: #2B2620;
+  --ink-soft: #5B5344;
+  --stamp-red: #A6362C;
+  --stamp-green: #3E6B4E;
+  --mustard: #C99A2E;
+  --whatsapp: #2E8B57;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--kraft);
+  background-image:
+    repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, transparent 1px, transparent 3px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.015) 0px, transparent 1px, transparent 3px);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  padding-bottom: 100px;
+}
+
+/* HEADER */
+.shop-header {
+  text-align: center;
+  padding: 36px 20px 24px;
+  border-bottom: 3px double var(--ink);
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.consult-link {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--kraft-dark);
+  border: 2px solid var(--ink);
+  border-radius: 20px;
+  padding: 6px 12px;
+}
+
+.stamp-mark {
+  display: inline-block;
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--stamp-green);
+  border: 2px solid var(--stamp-green);
+  border-radius: 4px;
+  padding: 4px 10px;
+  transform: rotate(-2deg);
+  margin-bottom: 14px;
+  background: rgba(62,107,78,0.05);
+}
+
+.shop-header h1 {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(38px, 10vw, 56px);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.shop-header h1 span {
+  color: var(--stamp-red);
+}
+
+.subtitle {
+  font-family: 'Special Elite', monospace;
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+}
+
+.provenance {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--ink-soft);
+  border-bottom: 1.5px dashed var(--ink-soft);
+  padding-bottom: 1px;
+}
+
+.provenance:hover { color: var(--ink); }
+
+/* TABS */
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 0 16px 20px;
+}
+
+.tab {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid var(--ink);
+  background: var(--kraft-dark);
+  color: var(--ink);
+  border-radius: 20px 20px 4px 4px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.tab:active { transform: scale(0.95); }
+
+.tab.active {
+  background: var(--ink);
+  color: var(--kraft);
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+  padding: 0 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* CARD = ficha de almacén */
+.card {
+  background: var(--card-bg);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  padding: 18px 16px 16px;
+  position: relative;
+  box-shadow: 4px 4px 0 rgba(43,38,32,0.15);
+  animation: cardIn 0.4s ease backwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.card-photo {
+  position: relative;
+  margin: -18px -16px 12px;
+  height: 190px;
+  background: #FBF7EC;
+  border-bottom: 2px solid var(--ink);
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+}
+
+.card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 6px;
+  transition: transform 0.25s ease;
+}
+
+.card:hover .card-photo img {
+  transform: scale(1.06);
+}
+
+.card-photo .stamps {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  align-items: flex-end;
+}
+
+.stamps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
+}
+
+.stamp {
+  font-family: 'Special Elite', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  border: 1.5px solid currentColor;
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+
+.stamp-green { color: var(--stamp-green); background: rgba(62,107,78,0.08); }
+.stamp-red { color: var(--stamp-red); background: rgba(166,54,44,0.08); }
+
+.card-name {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 6px 0 2px;
+  line-height: 1.25;
+}
+
+.card-desc {
+  font-family: 'Special Elite', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0 0 8px;
+}
+
+.unit-price {
+  font-family: 'Archivo', sans-serif;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+
+.unit-price span {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.unit-price em {
+  font-style: normal;
+  opacity: 0.65;
+}
+
+.card-bottom {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 1.5px dashed var(--ink-soft);
+  padding-top: 12px;
+}
+
+.box-price-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.box-label {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--mustard);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.card-price {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 20px;
+  color: var(--ink);
+}
+
+.order-btn {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  color: white;
+  background: var(--whatsapp);
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
+  box-shadow: 2px 2px 0 rgba(43,38,32,0.25);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.order-btn:active {
+  transform: translate(2px, 2px) rotate(-1deg);
+  box-shadow: 0 0 0 rgba(43,38,32,0.25);
+}
+
+/* HOW TO */
+.howto {
+  max-width: 700px;
+  margin: 48px auto 0;
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.howto-card {
+  flex: 1 1 180px;
+  background: var(--card-bg);
+  border: 2px dashed var(--ink-soft);
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+}
+
+.howto-num {
+  font-size: 22px;
+  color: var(--stamp-red);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.howto-card p {
+  font-size: 13px;
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+/* FOOTER */
+.foot {
+  text-align: center;
+  margin-top: 40px;
+  font-family: 'Special Elite', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.foot-link {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+.foot-link:hover { color: var(--ink); }
+
+.card-stepper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--kraft-dark);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 4px 6px;
+}
+
+.card-stepper .qty-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+  background: var(--ink);
+  color: var(--kraft);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.card-stepper .qty-btn:active { transform: scale(0.9); }
+
+.card-stepper .qty-value {
+  font-weight: 800;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* BARRA DE CARRITO FLOTANTE */
+.cart-bar {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: -100px;
+  max-width: 500px;
+  margin: 0 auto;
+  background: var(--ink);
+  color: var(--kraft);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 6px 0 rgba(0,0,0,0.25);
+  z-index: 20;
+  transition: bottom 0.25s ease;
+}
+
+.cart-bar.visible { bottom: 18px; }
+
+.cart-bar-info {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Archivo', sans-serif;
+}
+
+.cart-bar-count {
+  font-size: 12px;
+  font-family: 'Special Elite', monospace;
+  color: var(--mustard);
+}
+
+.cart-bar-total {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.cart-bar-btn {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  background: var(--whatsapp);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+.cart-bar-btn:active { transform: scale(0.96); }
+
+/* MODAL "MI PEDIDO" — ticket de papel */
+.cart-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,38,32,0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 30;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.cart-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cart-ticket {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 82vh;
+  border-radius: 16px 16px 0 0;
+  border: 2px solid var(--ink);
+  border-bottom: none;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  transition: transform 0.2s ease;
+}
+
+.cart-overlay.visible .cart-ticket { transform: translateY(0); }
+
+.ticket-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 2px dashed var(--ink-soft);
+  font-family: 'Special Elite', monospace;
+  letter-spacing: 1px;
+  font-size: 15px;
+}
+
+.ticket-close {
+  border: none;
+  background: none;
+  font-size: 18px;
+  color: var(--ink);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.ticket-body {
+  overflow-y: auto;
+  padding: 8px 18px;
+  flex: 1;
+}
+
+.ticket-empty {
+  font-size: 14px;
+  color: var(--ink-soft);
+  text-align: center;
+  padding: 30px 10px;
+}
+
+.ticket-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(43,38,32,0.2);
+}
+
+.ticket-row-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  background: var(--kraft-dark);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.ticket-row-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ticket-row-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.ticket-row-sub {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.ticket-row-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 5px;
+  background: var(--ink);
+  color: var(--kraft);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.qty-btn:active { transform: scale(0.9); }
+
+.qty-value {
+  font-weight: 800;
+  min-width: 16px;
+  text-align: center;
+}
+
+.ticket-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-top: 3px double var(--ink);
+  font-weight: 800;
+  font-size: 17px;
+}
+
+.send-order-btn {
+  display: block;
+  text-align: center;
+  margin: 0 18px 18px;
+  padding: 14px;
+  background: var(--whatsapp);
+  color: white;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 15px;
+  border-radius: 10px;
+  border: 2px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(43,38,32,0.25);
+}
+
+.send-order-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 rgba(43,38,32,0.25);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+  .tab, .order-btn, .cart-bar, .cart-overlay, .cart-ticket, .send-order-btn, .card-photo img { transition: none; }
+}
+</style>
+</body>
+</html>
