@@ -89,44 +89,21 @@
    📦 LISTA DE PRODUCTOS — EDITÁ ACÁ
    ============================================================ */
 const WHATSAPP_NUMBER = "59896190002";
+let PRODUCTS = [];
 
-const PRODUCTS = [
-  { name: "Rebozador clásico", unitPrice: 134, boxPrice: 1608, unitsPerBox: 12, tags: ["gluten"], img: "img/4830.webp", desc: "Caja x 12 350g" },
-  { name: "Rebozador gourmet crocante", unitPrice: 148, boxPrice: 1776, unitsPerBox: 12, tags: ["gluten"], img: "img/4831.webp", desc: "Caja x 12 350g" },
-  { name: "Rebozador crocante saborizado", unitPrice: 148, boxPrice: 1776, unitsPerBox: 12, tags: ["gluten"], img: "img/4832.webp", desc: "Caja x 12 350g" },
-  { name: "Pan de molde blanco sin gluten", unitPrice: 229, boxPrice: 1832, unitsPerBox: 8, tags: ["gluten"], img: "img/6674.webp", desc: "Caja x 8 350g" },
-  { name: "Budín vainilla sin gluten", unitPrice: 195, boxPrice: 2340, unitsPerBox: 12, tags: ["gluten"], img: "img/6675.webp", desc: "Caja x 12 250g" },
-  { name: "Budín de limón sin gluten", unitPrice: 195, boxPrice: 2340, unitsPerBox: 12, tags: ["gluten"], img: "img/6676.webp", desc: "Caja x 12 250g" },
-  { name: "Bizcochuelo vainilla sin gluten", unitPrice: 59, boxPrice: 708, unitsPerBox: 12, tags: ["gluten"], img: "img/10635.webp", desc: "Caja x 12 200g" },
-  { name: "Alfajor maicena s/gluten", unitPrice: 56.9, boxPrice: 682.8, unitsPerBox: 12, tags: ["gluten"], img: "img/2132.webp", desc: "Display x 12u 70g" },
-  { name: "Alfajor bañado c/chocolate s/gluten", unitPrice: 64, boxPrice: 768, unitsPerBox: 12, tags: ["gluten"], img: "img/2130.webp", desc: "Display x 12u 80g" },
-  { name: "Alfajor membrillo s/lactosa y s/gluten", unitPrice: 48.6, boxPrice: 583.2, unitsPerBox: 12, tags: ["gluten"], img: "img/2134.webp", desc: "Display x 12u 70g" },
-  { name: "Bombita dulce de leche bañado chocolate", unitPrice: 21, boxPrice: 504, unitsPerBox: 24, tags: ["gluten"], img: "img/6621.webp", desc: "Display x 24u 30g" },
-  { name: "Alfajor maizena s/glúten 70gr", unitPrice: 59.5, boxPrice: 357, unitsPerBox: 6, tags: ["gluten"], img: "img/2180.webp", desc: "CAJA X 6 U. 70GR" },
-  { name: "Alfajor bañado c/chocolate s/gluten", unitPrice: 66, boxPrice: 396, unitsPerBox: 6, tags: ["gluten"], img: "img/2178.webp", desc: "CAJA X 6 U. 70GR" },
-  { name: "Alfajor bañado c/choc blanco s/gluten", unitPrice: 64, boxPrice: 768, unitsPerBox: 12, tags: ["gluten"], img: "img/2128.webp", desc: "Display x 12u 70g" },
-  { name: "Alfajor bañado c/choc blanco s/gluten", unitPrice: 66, boxPrice: 396, unitsPerBox: 6, tags: ["gluten"], img: "img/2179.webp", desc: "CAJA X 6 U. 70GR" },
-  { name: "Alfajor membrillo s/lactosa y s/gluten", unitPrice: 51, boxPrice: 306, unitsPerBox: 6, tags: ["gluten"], img: "img/2181.webp", desc: "CAJA X 6 U. 70GR" },
-  { name: "Budín Marmolado Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3838.webp", desc: "Caja x 10" },
-  { name: "Budín Coco Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/4037.webp", desc: "Caja x 10" },
-  { name: "Budín Chocolate Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3837.webp", desc: "Caja x 10" },
-  { name: "Budín Naranja Zero Azúcar 250g", unitPrice: 159, boxPrice: 1590, unitsPerBox: 10, tags: ["azucar"], img: "img/3839.webp", desc: "Caja x 10" },
-  { name: "Alfajor de Semillas y Frutos Secos (Proteico)", unitPrice: 62.5, boxPrice: 500, unitsPerBox: 8, tags: ["azucar"], img: "img/1010.webp", desc: "caja x 8 u." },
-  { name: "Galletas Smams Chips Chocolate SIN AZÚCAR 150g", unitPrice: 144, boxPrice: 3456, unitsPerBox: 24, tags: ["azucar"], img: "img/4781.webp", desc: "Caja x 24u" },
-  { name: "Galletas Smams Chips Chocolate SIN GLUTEN 150g", unitPrice: 110.5, boxPrice: 2652, unitsPerBox: 24, tags: ["gluten"], img: "img/4661.webp", desc: "Caja x 24u" },
-  { name: "Galletas Smams Chocolate Rellena Vainilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4665.webp", desc: "Caja x 18u" },
-  { name: "Galletas Smams Crackers Clásica SIN GLUTEN 150g", unitPrice: 105, boxPrice: 1890, unitsPerBox: 18, tags: ["gluten"], img: "img/4662.webp", desc: "Caja x 18u" },
-  { name: "Galletas Smams Rellena Vainilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4659.webp", desc: "Caja x 18u" },
-  { name: "Galletas Smams Rellenas Frutilla SIN GLUTEN 105g", unitPrice: 89.5, boxPrice: 1611, unitsPerBox: 18, tags: ["gluten"], img: "img/4660.webp", desc: "Caja x 18u" },
-  { name: "Polvorón Smams vainilla SIN AZÚCAR 115g", unitPrice: 109, boxPrice: 2616, unitsPerBox: 24, tags: ["azucar"], img: "img/4783.webp", desc: "Caja x 24u" },
-  { name: "Barra cereales Frutos Secos 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3541.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Coco 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3551.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Chocolate 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3540.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Semillas 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3543.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Goji y Cranberry 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3586.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Proteínas Veganas 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3965.webp", desc: "Caja x 12u" },
-  { name: "Barra cereales Frutilla y Choco Blanco 25g", unitPrice: 34.8, boxPrice: 417.6, unitsPerBox: 12, tags: ["gluten"], img: "img/3992.webp", desc: "Caja x 12u" }
-];
+async function loadProducts() {
+  try {
+    const res = await fetch('data.json', { cache: 'no-store' });
+    const data = await res.json();
+    PRODUCTS = (data.products || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+  } catch (e) {
+    console.error('No se pudo cargar data.json', e);
+    PRODUCTS = [];
+  }
+  renderTabs();
+  renderGrid();
+  renderCart();
+}
 
 /* ============================================================
    Lógica de armado — no hace falta tocar de acá para abajo
@@ -314,9 +291,7 @@ function renderGrid() {
   });
 }
 
-renderTabs();
-renderGrid();
-renderCart();
+loadProducts();
 
 document.getElementById("openCartBtn").addEventListener("click", openCart);
 document.getElementById("closeCartBtn").addEventListener("click", closeCart);

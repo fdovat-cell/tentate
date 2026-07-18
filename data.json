@@ -1,0 +1,424 @@
+{
+  "products": [
+    {
+      "name": "Rebozador clásico",
+      "unitPrice": 134,
+      "boxPrice": 1608,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4830.webp",
+      "desc": "Caja x 12 350g",
+      "order": 1
+    },
+    {
+      "name": "Rebozador gourmet crocante",
+      "unitPrice": 148,
+      "boxPrice": 1776,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4831.webp",
+      "desc": "Caja x 12 350g",
+      "order": 2
+    },
+    {
+      "name": "Rebozador crocante saborizado",
+      "unitPrice": 148,
+      "boxPrice": 1776,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4832.webp",
+      "desc": "Caja x 12 350g",
+      "order": 3
+    },
+    {
+      "name": "Pan de molde blanco sin gluten",
+      "unitPrice": 229,
+      "boxPrice": 1832,
+      "unitsPerBox": 8,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6674.webp",
+      "desc": "Caja x 8 350g",
+      "order": 4
+    },
+    {
+      "name": "Budín vainilla sin gluten",
+      "unitPrice": 195,
+      "boxPrice": 2340,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6675.webp",
+      "desc": "Caja x 12 250g",
+      "order": 5
+    },
+    {
+      "name": "Budín de limón sin gluten",
+      "unitPrice": 195,
+      "boxPrice": 2340,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6676.webp",
+      "desc": "Caja x 12 250g",
+      "order": 6
+    },
+    {
+      "name": "Bizcochuelo vainilla sin gluten",
+      "unitPrice": 59,
+      "boxPrice": 708,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/10635.webp",
+      "desc": "Caja x 12 200g",
+      "order": 7
+    },
+    {
+      "name": "Alfajor maicena s/gluten",
+      "unitPrice": 56.9,
+      "boxPrice": 682.8,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2132.webp",
+      "desc": "Display x 12u 70g",
+      "order": 8
+    },
+    {
+      "name": "Alfajor bañado c/chocolate s/gluten",
+      "unitPrice": 64,
+      "boxPrice": 768,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2130.webp",
+      "desc": "Display x 12u 80g",
+      "order": 9
+    },
+    {
+      "name": "Alfajor membrillo s/lactosa y s/gluten",
+      "unitPrice": 48.6,
+      "boxPrice": 583.2,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2134.webp",
+      "desc": "Display x 12u 70g",
+      "order": 10
+    },
+    {
+      "name": "Bombita dulce de leche bañado chocolate",
+      "unitPrice": 21,
+      "boxPrice": 504,
+      "unitsPerBox": 24,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6621.webp",
+      "desc": "Display x 24u 30g",
+      "order": 11
+    },
+    {
+      "name": "Alfajor maizena s/glúten 70gr",
+      "unitPrice": 59.5,
+      "boxPrice": 357,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2180.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 12
+    },
+    {
+      "name": "Alfajor bañado c/chocolate s/gluten",
+      "unitPrice": 66,
+      "boxPrice": 396,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2178.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 13
+    },
+    {
+      "name": "Alfajor bañado c/choc blanco s/gluten",
+      "unitPrice": 64,
+      "boxPrice": 768,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2128.webp",
+      "desc": "Display x 12u 70g",
+      "order": 14
+    },
+    {
+      "name": "Alfajor bañado c/choc blanco s/gluten",
+      "unitPrice": 66,
+      "boxPrice": 396,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2179.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 15
+    },
+    {
+      "name": "Alfajor membrillo s/lactosa y s/gluten",
+      "unitPrice": 51,
+      "boxPrice": 306,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2181.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 16
+    },
+    {
+      "name": "Budín Marmolado Zero Azúcar 250g",
+      "unitPrice": 159,
+      "boxPrice": 1590,
+      "unitsPerBox": 10,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/3838.webp",
+      "desc": "Caja x 10",
+      "order": 17
+    },
+    {
+      "name": "Budín Coco Zero Azúcar 250g",
+      "unitPrice": 159,
+      "boxPrice": 1590,
+      "unitsPerBox": 10,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/4037.webp",
+      "desc": "Caja x 10",
+      "order": 18
+    },
+    {
+      "name": "Budín Chocolate Zero Azúcar 250g",
+      "unitPrice": 159,
+      "boxPrice": 1590,
+      "unitsPerBox": 10,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/3837.webp",
+      "desc": "Caja x 10",
+      "order": 19
+    },
+    {
+      "name": "Budín Naranja Zero Azúcar 250g",
+      "unitPrice": 159,
+      "boxPrice": 1590,
+      "unitsPerBox": 10,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/3839.webp",
+      "desc": "Caja x 10",
+      "order": 20
+    },
+    {
+      "name": "Alfajor de Semillas y Frutos Secos (Proteico)",
+      "unitPrice": 62.5,
+      "boxPrice": 500,
+      "unitsPerBox": 8,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/1010.webp",
+      "desc": "caja x 8 u.",
+      "order": 21
+    },
+    {
+      "name": "Galletas Smams Chips Chocolate SIN AZÚCAR 150g",
+      "unitPrice": 144,
+      "boxPrice": 3456,
+      "unitsPerBox": 24,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/4781.webp",
+      "desc": "Caja x 24u",
+      "order": 22
+    },
+    {
+      "name": "Galletas Smams Chips Chocolate SIN GLUTEN 150g",
+      "unitPrice": 110.5,
+      "boxPrice": 2652,
+      "unitsPerBox": 24,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4661.webp",
+      "desc": "Caja x 24u",
+      "order": 23
+    },
+    {
+      "name": "Galletas Smams Chocolate Rellena Vainilla SIN GLUTEN 105g",
+      "unitPrice": 89.5,
+      "boxPrice": 1611,
+      "unitsPerBox": 18,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4665.webp",
+      "desc": "Caja x 18u",
+      "order": 24
+    },
+    {
+      "name": "Galletas Smams Crackers Clásica SIN GLUTEN 150g",
+      "unitPrice": 105,
+      "boxPrice": 1890,
+      "unitsPerBox": 18,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4662.webp",
+      "desc": "Caja x 18u",
+      "order": 25
+    },
+    {
+      "name": "Galletas Smams Rellena Vainilla SIN GLUTEN 105g",
+      "unitPrice": 89.5,
+      "boxPrice": 1611,
+      "unitsPerBox": 18,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4659.webp",
+      "desc": "Caja x 18u",
+      "order": 26
+    },
+    {
+      "name": "Galletas Smams Rellenas Frutilla SIN GLUTEN 105g",
+      "unitPrice": 89.5,
+      "boxPrice": 1611,
+      "unitsPerBox": 18,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4660.webp",
+      "desc": "Caja x 18u",
+      "order": 27
+    },
+    {
+      "name": "Polvorón Smams vainilla SIN AZÚCAR 115g",
+      "unitPrice": 109,
+      "boxPrice": 2616,
+      "unitsPerBox": 24,
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/4783.webp",
+      "desc": "Caja x 24u",
+      "order": 28
+    },
+    {
+      "name": "Barra cereales Frutos Secos 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3541.webp",
+      "desc": "Caja x 12u",
+      "order": 29
+    },
+    {
+      "name": "Barra cereales Coco 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3551.webp",
+      "desc": "Caja x 12u",
+      "order": 30
+    },
+    {
+      "name": "Barra cereales Chocolate 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3540.webp",
+      "desc": "Caja x 12u",
+      "order": 31
+    },
+    {
+      "name": "Barra cereales Semillas 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3543.webp",
+      "desc": "Caja x 12u",
+      "order": 32
+    },
+    {
+      "name": "Barra cereales Goji y Cranberry 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3586.webp",
+      "desc": "Caja x 12u",
+      "order": 33
+    },
+    {
+      "name": "Barra cereales Proteínas Veganas 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3965.webp",
+      "desc": "Caja x 12u",
+      "order": 34
+    },
+    {
+      "name": "Barra cereales Frutilla y Choco Blanco 25g",
+      "unitPrice": 34.8,
+      "boxPrice": 417.6,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/3992.webp",
+      "desc": "Caja x 12u",
+      "order": 35
+    }
+  ]
+}

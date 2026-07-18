@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tentate · Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Archivo:wght@400;600;700;800&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ⚙️ CONFIGURACIÓN — Fer, ajustá esto cuando crees el repo nuevo
+   ============================================================ */
+</style>
+</head>
+<body>
+
+<!-- PANTALLA DE LOGIN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-box">
+    <h1>TENTATE<span>!</span></h1>
+    <p class="login-sub">Panel de administración</p>
+
+    <label class="field-label">Contraseña</label>
+    <input type="password" id="pwInput" class="field-input" placeholder="••••••••" autocomplete="off">
+
+    <label class="field-label">Token de GitHub (Personal Access Token)</label>
+    <input type="password" id="tokenInput" class="field-input" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    <p class="field-hint">Se guarda solo en este navegador, nunca se sube a ningún lado. Lo necesitás para poder guardar cambios en GitHub.</p>
+
+    <button id="loginBtn" class="btn-primary">Entrar</button>
+    <p id="loginError" class="login-error"></p>
+  </div>
+</div>
+
+<!-- PANEL PRINCIPAL -->
+<div id="adminScreen" class="admin-screen" style="display:none;">
+  <header class="admin-header">
+    <h1>TENTATE<span>!</span> <small>admin</small></h1>
+    <div class="admin-actions">
+      <span id="statusMsg" class="status-msg"></span>
+      <button id="addProductBtn" class="btn-secondary">+ Nuevo producto</button>
+      <button id="saveBtn" class="btn-primary">Guardar cambios</button>
+      <button id="logoutBtn" class="btn-ghost">Salir</button>
+    </div>
+  </header>
+
+  <p class="admin-help">Arrastrá las fichas del ☰ para cambiar el orden en que aparecen en la página. Los cambios no se guardan hasta que tocás "Guardar cambios".</p>
+
+  <div id="productList" class="product-list"></div>
+</div>
+
+<!-- MODAL DE EDICIÓN DE PRODUCTO -->
+<div id="editOverlay" class="edit-overlay">
+  <div class="edit-box">
+    <div class="edit-head">
+      <span id="editTitle">Editar producto</span>
+      <button id="closeEditBtn" class="edit-close">✕</button>
+    </div>
+    <div class="edit-body">
+      <label class="field-label">Nombre</label>
+      <input type="text" id="editName" class="field-input">
+
+      <label class="field-label">Foto (ruta dentro de img/)</label>
+      <input type="text" id="editImg" class="field-input" placeholder="img/1234.webp">
+
+      <div class="field-row">
+        <div>
+          <label class="field-label">Precio unitario ($)</label>
+          <input type="number" id="editUnitPrice" class="field-input" step="0.01">
+        </div>
+        <div>
+          <label class="field-label">Precio de caja ($)</label>
+          <input type="number" id="editBoxPrice" class="field-input" step="0.01">
+        </div>
+        <div>
+          <label class="field-label">Unidades por caja</label>
+          <input type="number" id="editUnitsPerBox" class="field-input">
+        </div>
+      </div>
+
+      <label class="field-label">Descripción / presentación</label>
+      <input type="text" id="editDesc" class="field-input" placeholder="caja x 12 u.">
+
+      <label class="field-label">Etiquetas</label>
+      <div class="tag-checks">
+        <label class="tag-check"><input type="checkbox" id="editTagGluten"> Sin Gluten</label>
+        <label class="tag-check"><input type="checkbox" id="editTagAzucar"> Sin Azúcar</label>
+      </div>
+
+      <div class="edit-footer">
+        <button id="deleteProductBtn" class="btn-danger">Eliminar producto</button>
+        <button id="confirmEditBtn" class="btn-primary">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ⚙️ CONFIGURACIÓN — Fer, ajustá esto cuando crees el repo nuevo
+   ============================================================ */
+const CONFIG = {
+  REPO_OWNER: "fdovat-cell",      // tu usuario de GitHub
+  REPO_NAME: "tentate",           // nombre del repo nuevo (ajustalo si le pusiste otro nombre)
+  BRANCH: "main",
+  DATA_PATH: "data.json",
+  ADMIN_PASSWORD: "tentate2026"   // cambiá esta contraseña antes de subir el archivo
+};
+
+let sha = null;        // hash del archivo data.json en GitHub, necesario para poder sobreescribirlo
+let products = [];     // productos cargados en memoria
+let dirty = false;     // si hay cambios sin guardar
+let editingId = null;  // producto que se está editando (null = nuevo)
+let draggedEl = null;
+
+const $ = (id) => document.getElementById(id);
+
+/* ---------- LOGIN ---------- */
+$("loginBtn").addEventListener("click", tryLogin);
+$("pwInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+$("tokenInput").addEventListener("keydown", e => { if (e.key === "Enter") tryLogin(); });
+
+function tryLogin() {
+  const pw = $("pwInput").value;
+  const token = $("tokenInput").value.trim();
+  if (pw !== CONFIG.ADMIN_PASSWORD) {
+    $("loginError").textContent = "Contraseña incorrecta";
+    return;
+  }
+  if (!token) {
+    $("loginError").textContent = "Falta el token de GitHub";
+    return;
+  }
+  sessionStorage.setItem("tentate_gh_token", token);
+  $("loginScreen").style.display = "none";
+  $("adminScreen").style.display = "block";
+  loadFromGitHub();
+}
+
+/* ---------- CARGA DESDE GITHUB ---------- */
+async function loadFromGitHub() {
+  setStatus("Cargando productos...");
+  const token = sessionStorage.getItem("tentate_gh_token");
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${CONFIG.DATA_PATH}?ref=${CONFIG.BRANCH}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!res.ok) throw new Error(`GitHub respondió ${res.status}`);
+    const file = await res.json();
+    sha = file.sha;
+    const decoded = decodeURIComponent(escape(atob(file.content)));
+    const data = JSON.parse(decoded);
+    products = (data.products || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
+    renderList();
+    setStatus("Listo · " + products.length + " productos");
+  } catch (e) {
+    console.error(e);
+    setStatus("⚠️ Error al cargar: " + e.message, true);
+  }
+}
+
+/* ---------- GUARDADO EN GITHUB ---------- */
+$("saveBtn").addEventListener("click", saveToGitHub);
+
+async function saveToGitHub() {
+  const token = sessionStorage.getItem("tentate_gh_token");
+  setStatus("Guardando...");
+  products.forEach((p, i) => p.order = i + 1);
+
+  const payload = { products };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${CONFIG.DATA_PATH}`,
+      {
+        method: "PUT",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: "Actualización de productos desde el admin",
+          content: content,
+          sha: sha,
+          branch: CONFIG.BRANCH
+        })
+      }
+    );
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(errBody.message || `GitHub respondió ${res.status}`);
+    }
+    const result = await res.json();
+    sha = result.content.sha;
+    dirty = false;
+    setStatus("✓ Guardado correctamente");
+  } catch (e) {
+    console.error(e);
+    setStatus("⚠️ Error al guardar: " + e.message, true);
+  }
+}
+
+function setStatus(msg, isError) {
+  const el = $("statusMsg");
+  el.textContent = msg;
+  el.style.color = isError ? "#A6362C" : "#5B5344";
+}
+
+/* ---------- RENDER DE LA LISTA ---------- */
+function renderList() {
+  const list = $("productList");
+  list.innerHTML = products.map((p, i) => `
+    <div class="product-row" draggable="true" data-index="${i}">
+      <span class="drag-handle">☰</span>
+      <img src="${p.img}" class="row-thumb" alt="">
+      <div class="row-info">
+        <span class="row-name">${p.name}</span>
+        <span class="row-meta">$${p.boxPrice} caja x${p.unitsPerBox} · ${(p.tags || []).map(tagLabel).join(" · ") || "sin etiqueta"}</span>
+      </div>
+      <button class="btn-secondary row-edit" data-index="${i}">Editar</button>
+    </div>
+  `).join("");
+
+  list.querySelectorAll(".row-edit").forEach(btn => {
+    btn.addEventListener("click", () => openEdit(parseInt(btn.dataset.index, 10)));
+  });
+
+  setupDragAndDrop();
+}
+
+function tagLabel(t) {
+  return t === "gluten" ? "Sin Gluten" : t === "azucar" ? "Sin Azúcar" : t;
+}
+
+/* ---------- DRAG & DROP PARA REORDENAR ---------- */
+function setupDragAndDrop() {
+  const rows = document.querySelectorAll(".product-row");
+  rows.forEach(row => {
+    row.addEventListener("dragstart", () => {
+      draggedEl = row;
+      row.classList.add("dragging");
+    });
+    row.addEventListener("dragend", () => {
+      row.classList.remove("dragging");
+      commitNewOrder();
+    });
+    row.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const list = $("productList");
+      const after = getRowAfter(list, e.clientY);
+      if (after == null) {
+        list.appendChild(draggedEl);
+      } else {
+        list.insertBefore(draggedEl, after);
+      }
+    });
+  });
+}
+
+function getRowAfter(container, y) {
+  const rows = [...container.querySelectorAll(".product-row:not(.dragging)")];
+  return rows.reduce((closest, row) => {
+    const box = row.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: row };
+    }
+    return closest;
+  }, { offset: -Infinity }).element;
+}
+
+function commitNewOrder() {
+  const newOrderIds = [...document.querySelectorAll(".product-row")].map(r => parseInt(r.dataset.index, 10));
+  // data-index quedó desactualizado tras el drag, reconstruimos products por posición real en el DOM
+  const rows = [...document.querySelectorAll(".product-row")];
+  const nameOrder = rows.map(r => r.querySelector(".row-name").textContent);
+  products.sort((a, b) => nameOrder.indexOf(a.name) - nameOrder.indexOf(b.name));
+  dirty = true;
+  renderList();
+  setStatus("Orden cambiado · falta guardar", true);
+}
+
+/* ---------- EDICIÓN / ALTA / BAJA DE PRODUCTO ---------- */
+$("addProductBtn").addEventListener("click", () => openEdit(null));
+$("closeEditBtn").addEventListener("click", closeEdit);
+$("confirmEditBtn").addEventListener("click", confirmEdit);
+$("deleteProductBtn").addEventListener("click", deleteProduct);
+
+function openEdit(index) {
+  editingId = index;
+  const isNew = index === null;
+  const p = isNew ? {} : products[index];
+
+  $("editTitle").textContent = isNew ? "Nuevo producto" : "Editar producto";
+  $("editName").value = p.name || "";
+  $("editImg").value = p.img || "";
+  $("editUnitPrice").value = p.unitPrice ?? "";
+  $("editBoxPrice").value = p.boxPrice ?? "";
+  $("editUnitsPerBox").value = p.unitsPerBox ?? "";
+  $("editDesc").value = p.desc || "";
+  $("editTagGluten").checked = (p.tags || []).includes("gluten");
+  $("editTagAzucar").checked = (p.tags || []).includes("azucar");
+  $("deleteProductBtn").style.display = isNew ? "none" : "inline-block";
+
+  $("editOverlay").classList.add("visible");
+}
+
+function closeEdit() {
+  $("editOverlay").classList.remove("visible");
+  editingId = null;
+}
+
+function confirmEdit() {
+  const tags = [];
+  if ($("editTagGluten").checked) tags.push("gluten");
+  if ($("editTagAzucar").checked) tags.push("azucar");
+
+  const data = {
+    name: $("editName").value.trim(),
+    img: $("editImg").value.trim(),
+    unitPrice: parseFloat($("editUnitPrice").value) || 0,
+    boxPrice: parseFloat($("editBoxPrice").value) || 0,
+    unitsPerBox: parseInt($("editUnitsPerBox").value, 10) || 1,
+    desc: $("editDesc").value.trim(),
+    tags
+  };
+
+  if (!data.name) {
+    alert("El producto necesita un nombre");
+    return;
+  }
+
+  if (editingId === null) {
+    data.order = products.length + 1;
+    products.push(data);
+  } else {
+    products[editingId] = { ...products[editingId], ...data };
+  }
+
+  dirty = true;
+  closeEdit();
+  renderList();
+  setStatus("Cambios sin guardar", true);
+}
+
+function deleteProduct() {
+  if (editingId === null) return;
+  if (!confirm("¿Eliminar este producto de la lista?")) return;
+  products.splice(editingId, 1);
+  dirty = true;
+  closeEdit();
+  renderList();
+  setStatus("Cambios sin guardar", true);
+}
+
+/* ---------- LOGOUT ---------- */
+$("logoutBtn").addEventListener("click", () => {
+  if (dirty && !confirm("Tenés cambios sin guardar. ¿Salir igual?")) return;
+  sessionStorage.removeItem("tentate_gh_token");
+  location.reload();
+});
+
+window.addEventListener("beforeunload", (e) => {
+  if (dirty) { e.preventDefault(); e.returnValue = ""; }
+});
+</script>
+
+<style>
+:root {
+  --kraft: #E4D9BE;
+  --kraft-dark: #D8CAA6;
+  --card-bg: #F4EDD9;
+  --ink: #2B2620;
+  --ink-soft: #5B5344;
+  --stamp-red: #A6362C;
+  --stamp-green: #3E6B4E;
+  --mustard: #C99A2E;
+  --whatsapp: #2E8B57;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--kraft);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+}
+
+h1 {
+  font-family: 'Archivo Black', sans-serif;
+}
+
+h1 span { color: var(--stamp-red); }
+
+/* LOGIN */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.login-box {
+  background: var(--card-bg);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  padding: 30px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 5px 5px 0 rgba(43,38,32,0.15);
+}
+
+.login-box h1 { font-size: 32px; margin: 0; text-align: center; }
+
+.login-sub {
+  text-align: center;
+  font-family: 'Special Elite', monospace;
+  color: var(--ink-soft);
+  margin: 4px 0 22px;
+}
+
+.field-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 14px 0 4px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 14px;
+  background: white;
+}
+
+.field-hint {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin: 4px 0 0;
+}
+
+.btn-primary {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background: var(--whatsapp);
+  color: white;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 rgba(43,38,32,0.25);
+}
+
+.btn-primary:active { transform: translate(2px,2px); box-shadow: none; }
+
+.login-error {
+  color: var(--stamp-red);
+  font-size: 13px;
+  text-align: center;
+  margin-top: 10px;
+  min-height: 16px;
+}
+
+/* ADMIN SCREEN */
+.admin-screen { padding: 20px; max-width: 900px; margin: 0 auto; }
+
+.admin-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 3px double var(--ink);
+  padding-bottom: 16px;
+  margin-bottom: 6px;
+}
+
+.admin-header h1 { font-size: 26px; margin: 0; }
+.admin-header small {
+  font-family: 'Special Elite', monospace;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.status-msg {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-family: 'Special Elite', monospace;
+}
+
+.btn-secondary, .btn-ghost, .btn-danger {
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: 'Archivo', sans-serif;
+}
+
+.btn-secondary { background: var(--kraft-dark); color: var(--ink); }
+.btn-ghost { background: transparent; color: var(--ink-soft); border-color: var(--ink-soft); }
+.btn-danger { background: var(--stamp-red); color: white; border-color: var(--ink); }
+
+.admin-help {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 14px 0 18px;
+}
+
+/* PRODUCT LIST */
+.product-list { display: flex; flex-direction: column; gap: 10px; }
+
+.product-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-bg);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: grab;
+}
+
+.product-row.dragging { opacity: 0.4; }
+
+.drag-handle { font-size: 18px; color: var(--ink-soft); }
+
+.row-thumb {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  background: #FBF7EC;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 3px;
+  flex-shrink: 0;
+}
+
+.row-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.row-name { font-weight: 700; font-size: 14px; }
+.row-meta {
+  font-family: 'Special Elite', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* EDIT MODAL */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,38,32,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 40;
+  padding: 16px;
+}
+
+.edit-overlay.visible { opacity: 1; pointer-events: auto; }
+
+.edit-box {
+  background: var(--card-bg);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 18px;
+  border-bottom: 2px dashed var(--ink-soft);
+  font-family: 'Special Elite', monospace;
+  font-size: 14px;
+}
+
+.edit-close { border: none; background: none; font-size: 18px; cursor: pointer; }
+
+.edit-body { padding: 6px 18px 18px; overflow-y: auto; }
+
+.field-row { display: flex; gap: 10px; }
+.field-row > div { flex: 1; }
+
+.tag-checks { display: flex; gap: 16px; margin-top: 6px; }
+.tag-check { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+
+.edit-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.edit-footer .btn-primary { margin-top: 0; width: auto; flex: 1; }
+</style>
+</body>
+</html>
