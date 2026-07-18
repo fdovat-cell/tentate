@@ -265,7 +265,13 @@ function closeCart() {
 /* ---------- COLLAGE DE PREVIEW ---------- */
 function renderPreview() {
   const strip = document.getElementById("previewStrip");
-  const items = PRODUCTS.slice(0, 4); // los primeros del orden que definiste en el admin
+
+  // Priorizamos productos golosos (con etiqueta "azucar", suelen ser más apetitosos en foto)
+  // y completamos con el resto del orden si hacen falta más para llegar a 4
+  const golosos = PRODUCTS.filter(p => (p.tags || []).includes("azucar"));
+  const resto = PRODUCTS.filter(p => !(p.tags || []).includes("azucar"));
+  const items = [...golosos, ...resto].slice(0, 4);
+
   if (items.length === 0) { strip.innerHTML = ""; return; }
 
   strip.innerHTML = items.map((p, i) => `
@@ -296,6 +302,11 @@ function renderFilterBar() {
 }
 
 /* ---------- BÚSQUEDA PREDICTIVA ---------- */
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  searchTerm = normalize(e.target.value.trim());
+  renderList();
+});
+
 function matchesSearch(p) {
   if (!searchTerm) return true;
   if (normalize(p.name).includes(searchTerm)) return true;
@@ -489,13 +500,13 @@ body {
 }
 
 .preview-item {
-  width: 84px;
-  height: 84px;
+  width: 120px;
+  height: 120px;
   background: #FBF7EC;
   border: 2px solid var(--ink);
-  border-radius: 8px;
-  padding: 6px;
-  box-shadow: 3px 3px 0 rgba(43,38,32,0.15);
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 4px 4px 0 rgba(43,38,32,0.15);
   transform: rotate(var(--rot, 0deg));
   transition: transform 0.15s ease;
 }
@@ -596,6 +607,7 @@ body {
   .box-label { font-size: 9px; }
   .order-btn { padding: 8px 10px; font-size: 12px; }
   .stamp { font-size: 10px; padding: 4px 7px; }
+  .preview-item { width: 100px; height: 100px; }
 }
 
 /* CARD = ficha de almacén */
@@ -713,6 +725,7 @@ body {
 
 .card-bottom {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
   border-top: 1.5px dashed var(--ink-soft);
@@ -725,6 +738,10 @@ body {
   display: flex;
   flex-direction: column;
   min-width: 0;
+}
+
+.box-label, .card-price {
+  white-space: nowrap;
 }
 
 .box-label {
