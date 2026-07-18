@@ -84,6 +84,7 @@
       <div class="tag-checks">
         <label class="tag-check"><input type="checkbox" id="editTagGluten"> Sin Gluten</label>
         <label class="tag-check"><input type="checkbox" id="editTagAzucar"> Sin Azúcar</label>
+        <label class="tag-check"><input type="checkbox" id="editTagVegano"> Vegano</label>
       </div>
 
       <div class="edit-footer">
@@ -205,6 +206,11 @@ function setStatus(msg, isError) {
 }
 
 /* ---------- RENDER DE LA LISTA ---------- */
+function getArticleNumber(p) {
+  const m = (p.img || "").match(/(\d+)/);
+  return m ? m[1] : "—";
+}
+
 function renderList() {
   const list = $("productList");
   list.innerHTML = products.map((p, i) => `
@@ -212,7 +218,7 @@ function renderList() {
       <span class="drag-handle">☰</span>
       <img src="${p.img}" class="row-thumb" alt="">
       <div class="row-info">
-        <span class="row-name">${p.name}</span>
+        <span class="row-name">${p.name} <span class="row-art">Art. ${getArticleNumber(p)}</span></span>
         <span class="row-meta">$${p.boxPrice} caja x${p.unitsPerBox} · ${(p.tags || []).map(tagLabel).join(" · ") || "sin etiqueta"}</span>
       </div>
       <button class="btn-secondary row-edit" data-index="${i}">Editar</button>
@@ -227,7 +233,7 @@ function renderList() {
 }
 
 function tagLabel(t) {
-  return t === "gluten" ? "Sin Gluten" : t === "azucar" ? "Sin Azúcar" : t;
+  return t === "gluten" ? "Sin Gluten" : t === "azucar" ? "Sin Azúcar" : t === "vegano" ? "Vegano" : t;
 }
 
 /* ---------- DRAG & DROP PARA REORDENAR ---------- */
@@ -298,6 +304,7 @@ function openEdit(index) {
   $("editDesc").value = p.desc || "";
   $("editTagGluten").checked = (p.tags || []).includes("gluten");
   $("editTagAzucar").checked = (p.tags || []).includes("azucar");
+  $("editTagVegano").checked = (p.tags || []).includes("vegano");
   $("deleteProductBtn").style.display = isNew ? "none" : "inline-block";
 
   $("editOverlay").classList.add("visible");
@@ -312,6 +319,7 @@ function confirmEdit() {
   const tags = [];
   if ($("editTagGluten").checked) tags.push("gluten");
   if ($("editTagAzucar").checked) tags.push("azucar");
+  if ($("editTagVegano").checked) tags.push("vegano");
 
   const data = {
     name: $("editName").value.trim(),
@@ -551,6 +559,7 @@ h1 span { color: var(--stamp-red); }
 
 .row-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .row-name { font-weight: 700; font-size: 14px; }
+.row-art { font-size: 11px; font-weight: 400; color: var(--ink-soft); }
 .row-meta {
   font-family: 'Special Elite', monospace;
   font-size: 11px;
