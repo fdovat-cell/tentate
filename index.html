@@ -296,17 +296,12 @@ function renderFilterBar() {
 }
 
 /* ---------- BÚSQUEDA PREDICTIVA ---------- */
-document.getElementById("searchInput").addEventListener("input", (e) => {
-  searchTerm = normalize(e.target.value.trim());
-  renderList();
-});
-
 function matchesSearch(p) {
   if (!searchTerm) return true;
   if (normalize(p.name).includes(searchTerm)) return true;
   if (normalize(p.desc).includes(searchTerm)) return true;
   // buscar también por etiqueta (ej: escribir "gluten" encuentra los que tienen el sello, aunque no esté en el nombre)
-  return (p.tags || []).some(t => normalize(TAG_LABELS[t].label).includes(searchTerm) || normalize(t).includes(searchTerm));
+  return (p.tags || []).some(t => TAG_LABELS[t] && (normalize(TAG_LABELS[t].label).includes(searchTerm) || normalize(t).includes(searchTerm)));
 }
 
 /* ---------- TARJETA DE PRODUCTO ---------- */
@@ -403,6 +398,7 @@ document.getElementById("cartOverlay").addEventListener("click", (e) => {
 
 body {
   margin: 0;
+  overflow-x: hidden;
   background-color: var(--kraft);
   background-image:
     repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, transparent 1px, transparent 3px),
@@ -415,7 +411,7 @@ body {
 /* HEADER */
 .shop-header {
   text-align: center;
-  padding: 36px 20px 24px;
+  padding: 46px 20px 24px;
   border-bottom: 3px double var(--ink);
   margin-bottom: 24px;
   position: relative;
@@ -424,16 +420,17 @@ body {
 
 .ribbon {
   position: absolute;
-  top: 18px;
-  right: -38px;
+  top: 30px;
+  right: -42px;
   background: var(--stamp-red);
   color: white;
   font-family: 'Archivo Black', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   letter-spacing: 0.5px;
-  padding: 6px 42px;
-  transform: rotate(30deg);
+  padding: 6px 40px;
+  transform: rotate(28deg);
   box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+  white-space: nowrap;
 }
 
 .stamp-mark {
@@ -611,6 +608,8 @@ body {
   box-shadow: 4px 4px 0 rgba(43,38,32,0.15);
   animation: cardIn 0.4s ease backwards;
   animation-delay: var(--delay, 0s);
+  min-width: 0;
+  overflow-wrap: break-word;
 }
 
 @keyframes cardIn {
@@ -689,8 +688,10 @@ body {
   color: var(--ink-soft);
   margin: 0 0 8px;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: 8px;
+  gap: 4px 8px;
+  min-width: 0;
 }
 
 .unit-price {
@@ -716,11 +717,14 @@ body {
   justify-content: space-between;
   border-top: 1.5px dashed var(--ink-soft);
   padding-top: 12px;
+  gap: 8px;
+  min-width: 0;
 }
 
 .box-price-block {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
 .box-label {
