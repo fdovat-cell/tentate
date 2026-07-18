@@ -1,6 +1,18 @@
 {
   "products": [
     {
+      "name": "Alfajor maicena s/gluten",
+      "unitPrice": 56.9,
+      "boxPrice": 682.8,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2132.webp",
+      "desc": "Display x 12u 70g",
+      "order": 1
+    },
+    {
       "name": "Rebozador clásico",
       "unitPrice": 134,
       "boxPrice": 1608,
@@ -10,7 +22,7 @@
       ],
       "img": "img/4830.webp",
       "desc": "Caja x 12 350g",
-      "order": 1
+      "order": 2
     },
     {
       "name": "Rebozador gourmet crocante",
@@ -22,7 +34,7 @@
       ],
       "img": "img/4831.webp",
       "desc": "Caja x 12 350g",
-      "order": 2
+      "order": 3
     },
     {
       "name": "Rebozador crocante saborizado",
@@ -34,7 +46,7 @@
       ],
       "img": "img/4832.webp",
       "desc": "Caja x 12 350g",
-      "order": 3
+      "order": 4
     },
     {
       "name": "Pan de molde blanco sin gluten",
@@ -46,7 +58,7 @@
       ],
       "img": "img/6674.webp",
       "desc": "Caja x 8 350g",
-      "order": 4
+      "order": 5
     },
     {
       "name": "Budín vainilla sin gluten",
@@ -58,7 +70,7 @@
       ],
       "img": "img/6675.webp",
       "desc": "Caja x 12 250g",
-      "order": 5
+      "order": 6
     },
     {
       "name": "Budín de limón sin gluten",
@@ -70,7 +82,7 @@
       ],
       "img": "img/6676.webp",
       "desc": "Caja x 12 250g",
-      "order": 6
+      "order": 7
     },
     {
       "name": "Bizcochuelo vainilla sin gluten",
@@ -82,18 +94,6 @@
       ],
       "img": "img/10635.webp",
       "desc": "Caja x 12 200g",
-      "order": 7
-    },
-    {
-      "name": "Alfajor maicena s/gluten",
-      "unitPrice": 56.9,
-      "boxPrice": 682.8,
-      "unitsPerBox": 12,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/2132.webp",
-      "desc": "Display x 12u 70g",
       "order": 8
     },
     {
@@ -109,6 +109,18 @@
       "order": 9
     },
     {
+      "name": "Alfajor bañado c/chocolate s/gluten",
+      "unitPrice": 66,
+      "boxPrice": 396,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2178.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 10
+    },
+    {
       "name": "Alfajor membrillo s/lactosa y s/gluten",
       "unitPrice": 48.6,
       "boxPrice": 583.2,
@@ -118,7 +130,19 @@
       ],
       "img": "img/2134.webp",
       "desc": "Display x 12u 70g",
-      "order": 10
+      "order": 11
+    },
+    {
+      "name": "Alfajor membrillo s/lactosa y s/gluten",
+      "unitPrice": 51,
+      "boxPrice": 306,
+      "unitsPerBox": 6,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/2181.webp",
+      "desc": "CAJA X 6 U. 70GR",
+      "order": 12
     },
     {
       "name": "Bombita dulce de leche bañado chocolate",
@@ -130,7 +154,7 @@
       ],
       "img": "img/6621.webp",
       "desc": "Display x 24u 30g",
-      "order": 11
+      "order": 13
     },
     {
       "name": "Alfajor maizena s/glúten 70gr",
@@ -142,19 +166,7 @@
       ],
       "img": "img/2180.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 12
-    },
-    {
-      "name": "Alfajor bañado c/chocolate s/gluten",
-      "unitPrice": 66,
-      "boxPrice": 396,
-      "unitsPerBox": 6,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/2178.webp",
-      "desc": "CAJA X 6 U. 70GR",
-      "order": 13
+      "order": 14
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -166,7 +178,7 @@
       ],
       "img": "img/2128.webp",
       "desc": "Display x 12u 70g",
-      "order": 14
+      "order": 15
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -177,18 +189,6 @@
         "gluten"
       ],
       "img": "img/2179.webp",
-      "desc": "CAJA X 6 U. 70GR",
-      "order": 15
-    },
-    {
-      "name": "Alfajor membrillo s/lactosa y s/gluten",
-      "unitPrice": 51,
-      "boxPrice": 306,
-      "unitsPerBox": 6,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/2181.webp",
       "desc": "CAJA X 6 U. 70GR",
       "order": 16
     },
