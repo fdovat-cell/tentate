@@ -34,29 +34,29 @@
   <div class="collage-card" style="left:0%;top:10px;width:120px;height:100px;transform:rotate(-6deg);z-index:3;">
     <img src="img/2134.webp" alt="Alfajor membrillo s/lactosa y s/gluten" loading="lazy">
   </div>
-  <div class="collage-card" style="left:16%;top:0;width:130px;height:108px;transform:rotate(4deg);z-index:4;">
+  <div class="collage-card m-feature" style="left:16%;top:0;width:130px;height:108px;transform:rotate(4deg);z-index:4;">
     <img src="img/1009.webp" alt="Alfajor almendras y castañas de cajú" loading="lazy">
   </div>
   <div class="collage-tape" style="top:-8px;left:calc(16% + 41px);transform:translateX(-50%) rotate(-3deg);z-index:5;"></div>
   <div class="collage-card" style="left:33%;top:22px;width:100px;height:82px;transform:rotate(-3deg);z-index:5;">
     <img src="img/4830.webp" alt="Rebozador clásico" loading="lazy">
   </div>
-  <div class="collage-card" style="left:45%;top:0;width:125px;height:104px;transform:rotate(6deg);z-index:2;">
+  <div class="collage-card m-feature" style="left:45%;top:0;width:125px;height:104px;transform:rotate(6deg);z-index:2;">
     <img src="img/4661.webp" alt="Galletas Smams Chips Chocolate sin gluten" loading="lazy">
   </div>
   <div class="collage-card" style="right:8%;top:8px;width:112px;height:92px;transform:rotate(-8deg);z-index:1;">
     <img src="img/4783.webp" alt="Polvorón Smams vainilla sin azúcar" loading="lazy">
   </div>
-  <div class="collage-card" style="left:4%;top:100px;width:110px;height:90px;transform:rotate(6deg);z-index:2;">
+  <div class="collage-card m-feature" style="left:4%;top:100px;width:110px;height:90px;transform:rotate(6deg);z-index:2;">
     <img src="img/3837.webp" alt="Budín Chocolate Zero Azúcar" loading="lazy">
   </div>
-  <div class="collage-card" style="left:23%;top:88px;width:135px;height:112px;transform:rotate(-4deg);z-index:4;">
+  <div class="collage-card m-feature" style="left:23%;top:88px;width:135px;height:112px;transform:rotate(-4deg);z-index:4;">
     <img src="img/2128.webp" alt="Alfajor bañado c/choc blanco s/gluten" loading="lazy">
   </div>
-  <div class="collage-card" style="left:44%;top:100px;width:100px;height:82px;transform:rotate(5deg);z-index:2;">
+  <div class="collage-card m-feature" style="left:44%;top:100px;width:100px;height:82px;transform:rotate(5deg);z-index:2;">
     <img src="img/6594.webp" alt="Barra cereal maní sin azúcar" loading="lazy">
   </div>
-  <div class="collage-card" style="right:6%;top:112px;width:105px;height:86px;transform:rotate(8deg);z-index:3;">
+  <div class="collage-card m-feature" style="right:6%;top:112px;width:105px;height:86px;transform:rotate(8deg);z-index:3;">
     <img src="img/3992.webp" alt="Barra cereales frutilla y choco blanco" loading="lazy">
   </div>
   <div class="collage-stamp" style="left:60%;top:80px;">SIN<br>TACC</div>
@@ -122,6 +122,12 @@
       <button class="ticket-close" id="closeCartBtn">✕</button>
     </div>
     <div class="ticket-body" id="ticketBody"></div>
+    <div class="ticket-customer">
+      <label for="custName">Nombre</label>
+      <input type="text" id="custName" placeholder="Tu nombre">
+      <label for="custPhone">Celular</label>
+      <input type="tel" id="custPhone" placeholder="Tu número de celular">
+    </div>
     <div class="ticket-total">
       <span>Total</span>
       <span id="ticketTotal">$0</span>
@@ -276,16 +282,23 @@ function buildWhatsAppOrderLink() {
   if (entries.length === 0) {
     return `https://wa.me/${WHATSAPP_NUMBER}`;
   }
-  const lines = entries.map(([name, qty]) => {
-    const p = findProduct(name);
+  const custName = document.getElementById("custName").value.trim();
+  const phone = document.getElementById("custPhone").value.trim();
+  const lines = entries.map(([prodName, qty]) => {
+    const p = findProduct(prodName);
     return `• ${p.name} — Caja x${p.unitsPerBox} · Cant: ${qty} · $${p.boxPrice * qty}`;
   });
-  const msg = `Hola! Quiero hacer este pedido:\n\n${lines.join("\n")}\n\nTotal: $${cartTotalPrice()}`;
+  const datosCliente = `Nombre: ${custName || "-"}\nCelular: ${phone || "-"}`;
+  const msg = `Hola! Quiero hacer este pedido:\n\n${datosCliente}\n\n${lines.join("\n")}\n\nTotal: $${cartTotalPrice()}`;
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
 }
 
 function openCart() {
   renderCart();
+  const savedName = localStorage.getItem("tentate_name");
+  const savedPhone = localStorage.getItem("tentate_phone");
+  if (savedName) document.getElementById("custName").value = savedName;
+  if (savedPhone) document.getElementById("custPhone").value = savedPhone;
   document.getElementById("cartOverlay").classList.add("visible");
 }
 
@@ -411,6 +424,27 @@ document.getElementById("openCartBtn").addEventListener("click", openCart);
 document.getElementById("closeCartBtn").addEventListener("click", closeCart);
 document.getElementById("cartOverlay").addEventListener("click", (e) => {
   if (e.target.id === "cartOverlay") closeCart();
+});
+
+document.getElementById("sendOrderBtn").addEventListener("click", (e) => {
+  const nameEl = document.getElementById("custName");
+  const phoneEl = document.getElementById("custPhone");
+  const name = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+
+  if (!name || !phone) {
+    e.preventDefault();
+    nameEl.classList.toggle("field-error", !name);
+    phoneEl.classList.toggle("field-error", !phone);
+    (name ? phoneEl : nameEl).focus();
+    return;
+  }
+
+  nameEl.classList.remove("field-error");
+  phoneEl.classList.remove("field-error");
+  localStorage.setItem("tentate_name", name);
+  localStorage.setItem("tentate_phone", phone);
+  e.currentTarget.href = buildWhatsAppOrderLink();
 });
 </script>
 
@@ -673,7 +707,26 @@ body {
   .box-label { font-size: 9px; }
   .order-btn { padding: 8px 10px; font-size: 12px; }
   .stamp { font-size: 10px; padding: 4px 7px; }
-  .collage { transform: scale(0.78); transform-origin: top center; margin-bottom: -46px; }
+  .collage {
+    position: static;
+    height: auto;
+    max-width: 300px;
+    display: grid;
+    grid-template-columns: repeat(2, 130px);
+    justify-content: center;
+    gap: 18px;
+    padding: 0;
+  }
+  .collage-card { display: none; }
+  .collage-card.m-feature {
+    display: block;
+    position: static;
+    width: 130px;
+    height: 130px;
+    padding: 5px;
+    transform: none;
+  }
+  .collage-tape, .collage-stamp { display: none; }
 }
 
 /* CARD = ficha de almacén */
@@ -738,14 +791,14 @@ body {
   letter-spacing: 0.5px;
   padding: 5px 10px;
   border-radius: 4px;
-  border: 2px solid currentColor;
+  border: 2px solid var(--ink);
   transform: rotate(-3deg);
   white-space: nowrap;
 }
 
-.stamp-green { color: var(--stamp-green); background: rgba(62,107,78,0.1); }
-.stamp-red { color: var(--stamp-red); background: rgba(166,54,44,0.1); }
-.stamp-vegano { color: var(--stamp-vegano); background: rgba(90,122,44,0.1); }
+.stamp-green { color: #F4EDD9; background: var(--stamp-green); }
+.stamp-red { color: #F4EDD9; background: var(--stamp-red); }
+.stamp-vegano { color: #F4EDD9; background: var(--stamp-vegano); }
 
 .art-number {
   font-size: 10px;
@@ -1156,6 +1209,37 @@ body {
   min-width: 16px;
   text-align: center;
 }
+
+.ticket-customer {
+  padding: 10px 18px 4px;
+  border-top: 1.5px dashed var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.ticket-customer label {
+  width: 100%;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: -4px;
+}
+
+.ticket-customer input {
+  flex: 1;
+  min-width: 120px;
+  padding: 9px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 14px;
+  background: var(--card-bg);
+  color: var(--ink);
+}
+
+.ticket-customer input::placeholder { color: var(--ink-soft); }
+.ticket-customer input.field-error { border-color: var(--stamp-red); }
 
 .ticket-total {
   display: flex;
