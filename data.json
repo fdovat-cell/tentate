@@ -245,9 +245,7 @@
       "unitPrice": 62.5,
       "boxPrice": 500,
       "unitsPerBox": 8,
-      "tags": [
-        "azucar"
-      ],
+      "tags": [],
       "img": "img/1010.webp",
       "desc": "caja x 8 u.",
       "order": 21
