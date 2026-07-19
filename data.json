@@ -459,46 +459,6 @@
       "order": 39
     },
     {
-      "name": "Barra cereal chocolate",
-      "unitPrice": 46.15,
-      "boxPrice": 738.38,
-      "unitsPerBox": 16,
-      "desc": "Display x 16 u",
-      "tags": [],
-      "img": "img/2072.webp",
-      "order": 40
-    },
-    {
-      "name": "Barra cereal maní tostado",
-      "unitPrice": 46.15,
-      "boxPrice": 738.38,
-      "unitsPerBox": 16,
-      "desc": "Display x 16 u",
-      "tags": [],
-      "img": "img/2073.webp",
-      "order": 41
-    },
-    {
-      "name": "Barra cereal pasas de uva",
-      "unitPrice": 46.15,
-      "boxPrice": 738.38,
-      "unitsPerBox": 16,
-      "desc": "Display x 16 u",
-      "tags": [],
-      "img": "img/2074.webp",
-      "order": 42
-    },
-    {
-      "name": "Barra cereal almendras",
-      "unitPrice": 47.62,
-      "boxPrice": 761.75,
-      "unitsPerBox": 16,
-      "desc": "Display x 16 u",
-      "tags": [],
-      "img": "img/2061.webp",
-      "order": 43
-    },
-    {
       "name": "Barra cereal surtidas",
       "unitPrice": 46.15,
       "boxPrice": 738.38,
@@ -506,7 +466,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2059.webp",
-      "order": 44
+      "order": 40
     },
     {
       "name": "Barra cereal maní sin azúcar",
@@ -518,7 +478,7 @@
         "azucar"
       ],
       "img": "img/6594.webp",
-      "order": 45
+      "order": 41
     },
     {
       "name": "Barra cereal pasas sin azúcar",
@@ -530,7 +490,7 @@
         "azucar"
       ],
       "img": "img/6595.webp",
-      "order": 46
+      "order": 42
     },
     {
       "name": "Barra cereal surtidas sin azúcar",
@@ -540,7 +500,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/6596.webp",
-      "order": 47
+      "order": 43
     }
   ]
 }
