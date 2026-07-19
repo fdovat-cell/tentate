@@ -498,7 +498,9 @@
       "boxPrice": 738.38,
       "unitsPerBox": 16,
       "desc": "Display x 16 u",
-      "tags": [],
+      "tags": [
+        "azucar"
+      ],
       "img": "img/6596.webp",
       "order": 43
     }
