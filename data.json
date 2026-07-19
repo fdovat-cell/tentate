@@ -13,16 +13,26 @@
       "order": 1
     },
     {
-      "name": "Rebozador clásico",
-      "unitPrice": 134,
-      "boxPrice": 1608,
-      "unitsPerBox": 12,
+      "name": "Alfajor bañado c/chocolate s/gluten",
+      "unitPrice": 66,
+      "boxPrice": 396,
+      "unitsPerBox": 6,
       "tags": [
         "gluten"
       ],
-      "img": "img/4830.webp",
-      "desc": "Caja x 12 350g",
+      "img": "img/2178.webp",
+      "desc": "CAJA X 6 U. 70GR",
       "order": 2
+    },
+    {
+      "name": "Alfajor de Semillas y Frutos Secos (Proteico)",
+      "unitPrice": 62.5,
+      "boxPrice": 500,
+      "unitsPerBox": 8,
+      "tags": [],
+      "img": "img/1010.webp",
+      "desc": "caja x 8 u.",
+      "order": 3
     },
     {
       "name": "Rebozador gourmet crocante",
@@ -34,7 +44,7 @@
       ],
       "img": "img/4831.webp",
       "desc": "Caja x 12 350g",
-      "order": 3
+      "order": 4
     },
     {
       "name": "Rebozador crocante saborizado",
@@ -46,7 +56,7 @@
       ],
       "img": "img/4832.webp",
       "desc": "Caja x 12 350g",
-      "order": 4
+      "order": 5
     },
     {
       "name": "Pan de molde blanco sin gluten",
@@ -58,7 +68,7 @@
       ],
       "img": "img/6674.webp",
       "desc": "Caja x 8 350g",
-      "order": 5
+      "order": 6
     },
     {
       "name": "Budín vainilla sin gluten",
@@ -70,7 +80,7 @@
       ],
       "img": "img/6675.webp",
       "desc": "Caja x 12 250g",
-      "order": 6
+      "order": 7
     },
     {
       "name": "Budín de limón sin gluten",
@@ -82,7 +92,7 @@
       ],
       "img": "img/6676.webp",
       "desc": "Caja x 12 250g",
-      "order": 7
+      "order": 8
     },
     {
       "name": "Bizcochuelo vainilla sin gluten",
@@ -94,7 +104,7 @@
       ],
       "img": "img/10635.webp",
       "desc": "Caja x 12 200g",
-      "order": 8
+      "order": 9
     },
     {
       "name": "Alfajor bañado c/chocolate s/gluten",
@@ -106,18 +116,6 @@
       ],
       "img": "img/2130.webp",
       "desc": "Display x 12u 80g",
-      "order": 9
-    },
-    {
-      "name": "Alfajor bañado c/chocolate s/gluten",
-      "unitPrice": 66,
-      "boxPrice": 396,
-      "unitsPerBox": 6,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/2178.webp",
-      "desc": "CAJA X 6 U. 70GR",
       "order": 10
     },
     {
@@ -181,6 +179,18 @@
       "order": 15
     },
     {
+      "name": "Rebozador clásico",
+      "unitPrice": 134,
+      "boxPrice": 1608,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4830.webp",
+      "desc": "Caja x 12 350g",
+      "order": 16
+    },
+    {
       "name": "Alfajor bañado c/choc blanco s/gluten",
       "unitPrice": 66,
       "boxPrice": 396,
@@ -190,7 +200,7 @@
       ],
       "img": "img/2179.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 16
+      "order": 17
     },
     {
       "name": "Budín Marmolado Zero Azúcar 250g",
@@ -202,7 +212,7 @@
       ],
       "img": "img/3838.webp",
       "desc": "Caja x 10",
-      "order": 17
+      "order": 18
     },
     {
       "name": "Budín Coco Zero Azúcar 250g",
@@ -214,7 +224,7 @@
       ],
       "img": "img/4037.webp",
       "desc": "Caja x 10",
-      "order": 18
+      "order": 19
     },
     {
       "name": "Budín Chocolate Zero Azúcar 250g",
@@ -226,7 +236,7 @@
       ],
       "img": "img/3837.webp",
       "desc": "Caja x 10",
-      "order": 19
+      "order": 20
     },
     {
       "name": "Budín Naranja Zero Azúcar 250g",
@@ -238,16 +248,6 @@
       ],
       "img": "img/3839.webp",
       "desc": "Caja x 10",
-      "order": 20
-    },
-    {
-      "name": "Alfajor de Semillas y Frutos Secos (Proteico)",
-      "unitPrice": 62.5,
-      "boxPrice": 500,
-      "unitsPerBox": 8,
-      "tags": [],
-      "img": "img/1010.webp",
-      "desc": "caja x 8 u.",
       "order": 21
     },
     {
