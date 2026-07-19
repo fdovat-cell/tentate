@@ -501,6 +501,116 @@
       "img": "img/10635.webp",
       "desc": "Caja x 12 200g",
       "order": 43
+    },
+    {
+      "name": "Alfajor Maicena 70g",
+      "unitPrice": 40,
+      "boxPrice": 840,
+      "unitsPerBox": 21,
+      "desc": "Bandeja x 21",
+      "tags": [],
+      "img": "img/9100.webp",
+      "order": 44
+    },
+    {
+      "name": "Alfajor Maicena Chica 45g",
+      "unitPrice": 26,
+      "boxPrice": 546,
+      "unitsPerBox": 21,
+      "desc": "Bandeja x 21",
+      "tags": [],
+      "img": "img/9104.webp",
+      "order": 45
+    },
+    {
+      "name": "Alfajor Maizena Bañada 75g",
+      "unitPrice": 40,
+      "boxPrice": 600,
+      "unitsPerBox": 15,
+      "desc": "Bandeja x 15 u",
+      "tags": [],
+      "img": "img/9103.webp",
+      "order": 46
+    },
+    {
+      "name": "Alfajor Nieve 85g",
+      "unitPrice": 52,
+      "boxPrice": 624,
+      "unitsPerBox": 12,
+      "desc": "Caja x 12",
+      "tags": [],
+      "img": "img/9192.webp",
+      "order": 47
+    },
+    {
+      "name": "Alfajor de Maní",
+      "unitPrice": 59,
+      "boxPrice": 708,
+      "unitsPerBox": 12,
+      "desc": "Caja x 12",
+      "tags": [],
+      "img": "img/9194.webp",
+      "order": 48
+    },
+    {
+      "name": "Alfajor Negrito 50g",
+      "unitPrice": 26,
+      "boxPrice": 546,
+      "unitsPerBox": 21,
+      "desc": "Bandeja x 21",
+      "tags": [],
+      "img": "img/9116.webp",
+      "order": 49
+    },
+    {
+      "name": "Espejito 70g",
+      "unitPrice": 37,
+      "boxPrice": 666,
+      "unitsPerBox": 18,
+      "desc": "Caja x 18",
+      "tags": [],
+      "img": "img/9150.webp",
+      "order": 50
+    },
+    {
+      "name": "Yoyo 85g",
+      "unitPrice": 52,
+      "boxPrice": 624,
+      "unitsPerBox": 12,
+      "desc": "Caja x 12",
+      "tags": [],
+      "img": "img/9154.webp",
+      "order": 51
+    },
+    {
+      "name": "Conos Rellenos DDL",
+      "unitPrice": 52,
+      "boxPrice": 624,
+      "unitsPerBox": 12,
+      "desc": "Bandeja x 12",
+      "tags": [],
+      "img": "img/9211.webp",
+      "order": 52
+    },
+    {
+      "name": "Alfajor relleno dulce de leche sabor limón",
+      "unitPrice": 44.5,
+      "boxPrice": 534,
+      "unitsPerBox": 12,
+      "desc": "caja x 12 u.",
+      "tags": [],
+      "img": "img/1015.webp",
+      "order": 53
+    },
+    {
+      "name": "Alfajor Maizena ch x 21 u",
+      "unitPrice": 26,
+      "boxPrice": 546,
+      "unitsPerBox": 21,
+      "desc": "caja x 21 u",
+      "tags": [],
+      "img": "img/9104.webp",
+      "order": 54
     }
   ]
 }
