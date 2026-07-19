@@ -27,17 +27,47 @@
   <div class="stamp-mark">100% SIN TACC · SIN AZÚCAR</div>
   <h1>TENTATE<span>!</span></h1>
   <p class="subtitle">Sin gluten, sin azúcar, sin culpa</p>
-  <a href="https://pelsas-distribuidora.pages.dev" target="_blank" rel="noopener" class="provenance">
-    Seleccionado y distribuido por PelSAS ↗
-  </a>
 </header>
 
-<!-- COLLAGE DE PREVIEW -->
-<div class="preview-strip" id="previewStrip"></div>
+<!-- COLLAGE FIJO (curado a mano — para cambiar las fotos, editar acá) -->
+<div class="collage">
+  <div class="collage-card" style="left:0%;top:10px;width:120px;height:100px;transform:rotate(-6deg);z-index:3;">
+    <img src="img/2134.webp" alt="Alfajor membrillo s/lactosa y s/gluten" loading="lazy">
+  </div>
+  <div class="collage-card" style="left:16%;top:0;width:130px;height:108px;transform:rotate(4deg);z-index:4;">
+    <img src="img/1009.webp" alt="Alfajor almendras y castañas de cajú" loading="lazy">
+  </div>
+  <div class="collage-tape" style="top:-8px;left:calc(16% + 41px);transform:translateX(-50%) rotate(-3deg);z-index:5;"></div>
+  <div class="collage-card" style="left:33%;top:22px;width:100px;height:82px;transform:rotate(-3deg);z-index:5;">
+    <img src="img/4830.webp" alt="Rebozador clásico" loading="lazy">
+  </div>
+  <div class="collage-card" style="left:45%;top:0;width:125px;height:104px;transform:rotate(6deg);z-index:2;">
+    <img src="img/4661.webp" alt="Galletas Smams Chips Chocolate sin gluten" loading="lazy">
+  </div>
+  <div class="collage-card" style="right:8%;top:8px;width:112px;height:92px;transform:rotate(-8deg);z-index:1;">
+    <img src="img/4783.webp" alt="Polvorón Smams vainilla sin azúcar" loading="lazy">
+  </div>
+  <div class="collage-card" style="left:4%;top:100px;width:110px;height:90px;transform:rotate(6deg);z-index:2;">
+    <img src="img/3837.webp" alt="Budín Chocolate Zero Azúcar" loading="lazy">
+  </div>
+  <div class="collage-card" style="left:23%;top:88px;width:135px;height:112px;transform:rotate(-4deg);z-index:4;">
+    <img src="img/2128.webp" alt="Alfajor bañado c/choc blanco s/gluten" loading="lazy">
+  </div>
+  <div class="collage-card" style="left:44%;top:100px;width:100px;height:82px;transform:rotate(5deg);z-index:2;">
+    <img src="img/6594.webp" alt="Barra cereal maní sin azúcar" loading="lazy">
+  </div>
+  <div class="collage-card" style="right:6%;top:112px;width:105px;height:86px;transform:rotate(8deg);z-index:3;">
+    <img src="img/3992.webp" alt="Barra cereales frutilla y choco blanco" loading="lazy">
+  </div>
+  <div class="collage-stamp" style="left:60%;top:80px;">SIN<br>TACC</div>
+</div>
 
 <!-- BUSCADOR PREDICTIVO -->
 <div class="search-bar">
-  <input type="text" id="searchInput" placeholder="🔍 Buscar producto, sin gluten, vegano...">
+  <div class="search-bar-inner">
+    <input type="text" id="searchInput" placeholder="🔍 Buscar producto, sin gluten, vegano...">
+    <button type="button" class="search-clear" id="searchClear" aria-label="Limpiar búsqueda">✕</button>
+  </div>
 </div>
 
 <!-- BOTÓN DE FILTRO ÚNICO -->
@@ -62,8 +92,10 @@
   </div>
 </section>
 
+<p class="provenance-note">Seleccionado y distribuido por PelSAS Distribuidora</p>
+
 <footer class="foot">
-  <p>Un servicio de <a href="https://pelsas-distribuidora.pages.dev" target="_blank" rel="noopener" class="foot-link">PelSAS Distribuidora</a> — Montevideo</p>
+  <p>Un servicio de PelSAS Distribuidora — Montevideo</p>
 </footer>
 
 <!-- BOTÓN FLOTANTE DE CONSULTA (WhatsApp) -->
@@ -116,7 +148,6 @@ async function loadProducts() {
     console.error('No se pudo cargar data.json', e);
     PRODUCTS = [];
   }
-  renderPreview();
   renderFilterBar();
   renderList();
   renderCart();
@@ -262,25 +293,6 @@ function closeCart() {
   document.getElementById("cartOverlay").classList.remove("visible");
 }
 
-/* ---------- COLLAGE DE PREVIEW ---------- */
-function renderPreview() {
-  const strip = document.getElementById("previewStrip");
-
-  // Priorizamos productos golosos (con etiqueta "azucar", suelen ser más apetitosos en foto)
-  // y completamos con el resto del orden si hacen falta más para llegar a 4
-  const golosos = PRODUCTS.filter(p => (p.tags || []).includes("azucar"));
-  const resto = PRODUCTS.filter(p => !(p.tags || []).includes("azucar"));
-  const items = [...golosos, ...resto].slice(0, 4);
-
-  if (items.length === 0) { strip.innerHTML = ""; return; }
-
-  strip.innerHTML = items.map((p, i) => `
-    <div class="preview-item" style="--rot:${(i % 2 === 0 ? -1 : 1) * (3 + i)}deg">
-      <img src="${p.img}" alt="${p.name}" loading="lazy">
-    </div>
-  `).join("");
-}
-
 /* ---------- BOTÓN DE FILTRO ÚNICO ---------- */
 function renderFilterBar() {
   const bar = document.getElementById("filterBar");
@@ -302,9 +314,21 @@ function renderFilterBar() {
 }
 
 /* ---------- BÚSQUEDA PREDICTIVA ---------- */
-document.getElementById("searchInput").addEventListener("input", (e) => {
+const searchInputEl = document.getElementById("searchInput");
+const searchClearEl = document.getElementById("searchClear");
+
+searchInputEl.addEventListener("input", (e) => {
   searchTerm = normalize(e.target.value.trim());
+  searchClearEl.classList.toggle("visible", e.target.value.length > 0);
   renderList();
+});
+
+searchClearEl.addEventListener("click", () => {
+  searchInputEl.value = "";
+  searchTerm = "";
+  searchClearEl.classList.remove("visible");
+  renderList();
+  searchInputEl.focus();
 });
 
 function matchesSearch(p) {
@@ -476,59 +500,83 @@ body {
   margin-top: 8px;
 }
 
-.provenance {
-  display: inline-block;
-  margin-top: 10px;
+.provenance-note {
+  text-align: center;
   font-family: 'Archivo', sans-serif;
   font-size: 12px;
   font-weight: 700;
-  text-decoration: none;
   color: var(--ink-soft);
-  border-bottom: 1.5px dashed var(--ink-soft);
-  padding-bottom: 1px;
+  margin: -10px 0 30px;
 }
 
-.provenance:hover { color: var(--ink); }
-
-/* COLLAGE DE PREVIEW */
-.preview-strip {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  padding: 0 16px 26px;
-  flex-wrap: wrap;
+/* COLLAGE FIJO (curado a mano, ver admin) */
+.collage {
+  position: relative;
+  max-width: 480px;
+  height: 210px;
+  margin: 0 auto 30px;
 }
 
-.preview-item {
-  width: 120px;
-  height: 120px;
+.collage-card {
+  position: absolute;
   background: #FBF7EC;
   border: 2px solid var(--ink);
   border-radius: 10px;
-  padding: 8px;
-  box-shadow: 4px 4px 0 rgba(43,38,32,0.15);
-  transform: rotate(var(--rot, 0deg));
-  transition: transform 0.15s ease;
+  padding: 7px;
+  box-shadow: 4px 4px 0 rgba(43,38,32,0.18);
 }
 
-.preview-item:hover { transform: rotate(0deg) scale(1.05); }
-
-.preview-item img {
+.collage-card img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+  display: block;
+}
+
+.collage-tape {
+  position: absolute;
+  width: 48px;
+  height: 17px;
+  background: rgba(201,154,46,0.55);
+  border: 1px solid rgba(43,38,32,0.3);
+}
+
+.collage-stamp {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--stamp-red);
+  color: var(--stamp-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+  transform: rotate(-15deg);
 }
 
 /* BUSCADOR */
 .search-bar {
   max-width: 500px;
   margin: 0 auto 14px;
-  padding: 0 16px;
+  padding: 10px 16px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--kraft);
+  position: -webkit-sticky;
+}
+
+.search-bar-inner {
+  position: relative;
 }
 
 .search-bar input {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 40px 12px 16px;
   border: 2px solid var(--ink);
   border-radius: 24px;
   font-family: 'Archivo', sans-serif;
@@ -539,6 +587,24 @@ body {
 
 .search-bar input::placeholder { color: var(--ink-soft); }
 .search-bar input:focus { outline: 3px solid var(--mustard); outline-offset: 1px; }
+
+.search-clear {
+  display: none;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.search-clear.visible { display: block; }
+.search-clear:hover { color: var(--ink); }
 
 /* FILTRO ÚNICO */
 .filter-bar {
@@ -607,7 +673,7 @@ body {
   .box-label { font-size: 9px; }
   .order-btn { padding: 8px 10px; font-size: 12px; }
   .stamp { font-size: 10px; padding: 4px 7px; }
-  .preview-item { width: 100px; height: 100px; }
+  .collage { transform: scale(0.78); transform-origin: top center; margin-bottom: -46px; }
 }
 
 /* CARD = ficha de almacén */
