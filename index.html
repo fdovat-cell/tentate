@@ -29,38 +29,6 @@
   <p class="subtitle">Sin gluten, sin azúcar, sin culpa</p>
 </header>
 
-<!-- COLLAGE FIJO (curado a mano — para cambiar las fotos, editar acá) -->
-<div class="collage">
-  <div class="collage-card" style="left:0%;top:10px;width:120px;height:100px;transform:rotate(-6deg);z-index:3;">
-    <img src="img/2134.webp" alt="Alfajor membrillo s/lactosa y s/gluten" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="left:16%;top:0;width:130px;height:108px;transform:rotate(4deg);z-index:4;">
-    <img src="img/1009.webp" alt="Alfajor almendras y castañas de cajú" loading="lazy">
-  </div>
-  <div class="collage-tape" style="top:-8px;left:calc(16% + 41px);transform:translateX(-50%) rotate(-3deg);z-index:5;"></div>
-  <div class="collage-card" style="left:33%;top:22px;width:100px;height:82px;transform:rotate(-3deg);z-index:5;">
-    <img src="img/4830.webp" alt="Rebozador clásico" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="left:45%;top:0;width:125px;height:104px;transform:rotate(6deg);z-index:2;">
-    <img src="img/4661.webp" alt="Galletas Smams Chips Chocolate sin gluten" loading="lazy">
-  </div>
-  <div class="collage-card" style="right:8%;top:8px;width:112px;height:92px;transform:rotate(-8deg);z-index:1;">
-    <img src="img/4783.webp" alt="Polvorón Smams vainilla sin azúcar" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="left:4%;top:100px;width:110px;height:90px;transform:rotate(6deg);z-index:2;">
-    <img src="img/3837.webp" alt="Budín Chocolate Zero Azúcar" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="left:23%;top:88px;width:135px;height:112px;transform:rotate(-4deg);z-index:4;">
-    <img src="img/2128.webp" alt="Alfajor bañado c/choc blanco s/gluten" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="left:44%;top:100px;width:100px;height:82px;transform:rotate(5deg);z-index:2;">
-    <img src="img/6594.webp" alt="Barra cereal maní sin azúcar" loading="lazy">
-  </div>
-  <div class="collage-card m-feature" style="right:6%;top:112px;width:105px;height:86px;transform:rotate(8deg);z-index:3;">
-    <img src="img/3992.webp" alt="Barra cereales frutilla y choco blanco" loading="lazy">
-  </div>
-  <div class="collage-stamp" style="left:60%;top:80px;">SIN<br>TACC</div>
-</div>
 
 <!-- BUSCADOR PREDICTIVO -->
 <div class="search-bar">
@@ -543,55 +511,6 @@ body {
   margin: -10px 0 30px;
 }
 
-/* COLLAGE FIJO (curado a mano, ver admin) */
-.collage {
-  position: relative;
-  max-width: 480px;
-  height: 210px;
-  margin: 0 auto 30px;
-}
-
-.collage-card {
-  position: absolute;
-  background: #FBF7EC;
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  padding: 7px;
-  box-shadow: 4px 4px 0 rgba(43,38,32,0.18);
-}
-
-.collage-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-.collage-tape {
-  position: absolute;
-  width: 48px;
-  height: 17px;
-  background: rgba(201,154,46,0.55);
-  border: 1px solid rgba(43,38,32,0.3);
-}
-
-.collage-stamp {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 2px solid var(--stamp-red);
-  color: var(--stamp-red);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 6px;
-  font-weight: bold;
-  text-align: center;
-  line-height: 1;
-  transform: rotate(-15deg);
-}
-
 /* BUSCADOR */
 .search-bar {
   max-width: 500px;
@@ -707,26 +626,6 @@ body {
   .box-label { font-size: 9px; }
   .order-btn { padding: 8px 10px; font-size: 12px; }
   .stamp { font-size: 10px; padding: 4px 7px; }
-  .collage {
-    position: static;
-    height: auto;
-    max-width: 300px;
-    display: grid;
-    grid-template-columns: repeat(2, 130px);
-    justify-content: center;
-    gap: 18px;
-    padding: 0;
-  }
-  .collage-card { display: none; }
-  .collage-card.m-feature {
-    display: block;
-    position: static;
-    width: 130px;
-    height: 130px;
-    padding: 5px;
-    transform: none;
-  }
-  .collage-tape, .collage-stamp { display: none; }
 }
 
 /* CARD = ficha de almacén */
