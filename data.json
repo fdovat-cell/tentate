@@ -35,54 +35,6 @@
       "order": 3
     },
     {
-      "name": "Rebozador gourmet crocante",
-      "unitPrice": 148,
-      "boxPrice": 1776,
-      "unitsPerBox": 12,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/4831.webp",
-      "desc": "Caja x 12 350g",
-      "order": 4
-    },
-    {
-      "name": "Rebozador crocante saborizado",
-      "unitPrice": 148,
-      "boxPrice": 1776,
-      "unitsPerBox": 12,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/4832.webp",
-      "desc": "Caja x 12 350g",
-      "order": 5
-    },
-    {
-      "name": "Pan de molde blanco sin gluten",
-      "unitPrice": 229,
-      "boxPrice": 1832,
-      "unitsPerBox": 8,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/6674.webp",
-      "desc": "Caja x 8 350g",
-      "order": 6
-    },
-    {
-      "name": "Budín vainilla sin gluten",
-      "unitPrice": 195,
-      "boxPrice": 2340,
-      "unitsPerBox": 12,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/6675.webp",
-      "desc": "Caja x 12 250g",
-      "order": 7
-    },
-    {
       "name": "Budín de limón sin gluten",
       "unitPrice": 195,
       "boxPrice": 2340,
@@ -92,19 +44,7 @@
       ],
       "img": "img/6676.webp",
       "desc": "Caja x 12 250g",
-      "order": 8
-    },
-    {
-      "name": "Bizcochuelo vainilla sin gluten",
-      "unitPrice": 59,
-      "boxPrice": 708,
-      "unitsPerBox": 12,
-      "tags": [
-        "gluten"
-      ],
-      "img": "img/10635.webp",
-      "desc": "Caja x 12 200g",
-      "order": 9
+      "order": 4
     },
     {
       "name": "Alfajor bañado c/chocolate s/gluten",
@@ -116,7 +56,7 @@
       ],
       "img": "img/2130.webp",
       "desc": "Display x 12u 80g",
-      "order": 10
+      "order": 5
     },
     {
       "name": "Alfajor membrillo s/lactosa y s/gluten",
@@ -128,7 +68,7 @@
       ],
       "img": "img/2134.webp",
       "desc": "Display x 12u 70g",
-      "order": 11
+      "order": 6
     },
     {
       "name": "Alfajor membrillo s/lactosa y s/gluten",
@@ -140,7 +80,7 @@
       ],
       "img": "img/2181.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 12
+      "order": 7
     },
     {
       "name": "Bombita dulce de leche bañado chocolate",
@@ -152,7 +92,7 @@
       ],
       "img": "img/6621.webp",
       "desc": "Display x 24u 30g",
-      "order": 13
+      "order": 8
     },
     {
       "name": "Alfajor maizena s/glúten 70gr",
@@ -164,7 +104,7 @@
       ],
       "img": "img/2180.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 14
+      "order": 9
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -176,7 +116,7 @@
       ],
       "img": "img/2128.webp",
       "desc": "Display x 12u 70g",
-      "order": 15
+      "order": 10
     },
     {
       "name": "Rebozador clásico",
@@ -188,7 +128,7 @@
       ],
       "img": "img/4830.webp",
       "desc": "Caja x 12 350g",
-      "order": 16
+      "order": 11
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -200,7 +140,7 @@
       ],
       "img": "img/2179.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 17
+      "order": 12
     },
     {
       "name": "Budín Marmolado Zero Azúcar 250g",
@@ -212,7 +152,7 @@
       ],
       "img": "img/3838.webp",
       "desc": "Caja x 10",
-      "order": 18
+      "order": 13
     },
     {
       "name": "Budín Coco Zero Azúcar 250g",
@@ -224,7 +164,7 @@
       ],
       "img": "img/4037.webp",
       "desc": "Caja x 10",
-      "order": 19
+      "order": 14
     },
     {
       "name": "Budín Chocolate Zero Azúcar 250g",
@@ -236,7 +176,7 @@
       ],
       "img": "img/3837.webp",
       "desc": "Caja x 10",
-      "order": 20
+      "order": 15
     },
     {
       "name": "Budín Naranja Zero Azúcar 250g",
@@ -248,7 +188,7 @@
       ],
       "img": "img/3839.webp",
       "desc": "Caja x 10",
-      "order": 21
+      "order": 16
     },
     {
       "name": "Galletas Smams Chips Chocolate SIN AZÚCAR 150g",
@@ -260,7 +200,7 @@
       ],
       "img": "img/4781.webp",
       "desc": "Caja x 24u",
-      "order": 22
+      "order": 17
     },
     {
       "name": "Galletas Smams Chips Chocolate SIN GLUTEN 150g",
@@ -272,7 +212,7 @@
       ],
       "img": "img/4661.webp",
       "desc": "Caja x 24u",
-      "order": 23
+      "order": 18
     },
     {
       "name": "Galletas Smams Chocolate Rellena Vainilla SIN GLUTEN 105g",
@@ -284,7 +224,7 @@
       ],
       "img": "img/4665.webp",
       "desc": "Caja x 18u",
-      "order": 24
+      "order": 19
     },
     {
       "name": "Galletas Smams Crackers Clásica SIN GLUTEN 150g",
@@ -296,7 +236,7 @@
       ],
       "img": "img/4662.webp",
       "desc": "Caja x 18u",
-      "order": 25
+      "order": 20
     },
     {
       "name": "Galletas Smams Rellena Vainilla SIN GLUTEN 105g",
@@ -308,7 +248,7 @@
       ],
       "img": "img/4659.webp",
       "desc": "Caja x 18u",
-      "order": 26
+      "order": 21
     },
     {
       "name": "Galletas Smams Rellenas Frutilla SIN GLUTEN 105g",
@@ -320,7 +260,7 @@
       ],
       "img": "img/4660.webp",
       "desc": "Caja x 18u",
-      "order": 27
+      "order": 22
     },
     {
       "name": "Polvorón Smams vainilla SIN AZÚCAR 115g",
@@ -332,7 +272,7 @@
       ],
       "img": "img/4783.webp",
       "desc": "Caja x 24u",
-      "order": 28
+      "order": 23
     },
     {
       "name": "Barra cereales Frutos Secos 25g",
@@ -342,7 +282,7 @@
       "tags": [],
       "img": "img/3541.webp",
       "desc": "Caja x 12u",
-      "order": 29
+      "order": 24
     },
     {
       "name": "Barra cereales Coco 25g",
@@ -354,7 +294,7 @@
       ],
       "img": "img/3551.webp",
       "desc": "Caja x 12u",
-      "order": 30
+      "order": 25
     },
     {
       "name": "Barra cereales Chocolate 25g",
@@ -366,7 +306,7 @@
       ],
       "img": "img/3540.webp",
       "desc": "Caja x 12u",
-      "order": 31
+      "order": 26
     },
     {
       "name": "Barra cereales Semillas 25g",
@@ -378,7 +318,7 @@
       ],
       "img": "img/3543.webp",
       "desc": "Caja x 12u",
-      "order": 32
+      "order": 27
     },
     {
       "name": "Barra cereales Goji y Cranberry 25g",
@@ -390,7 +330,7 @@
       ],
       "img": "img/3586.webp",
       "desc": "Caja x 12u",
-      "order": 33
+      "order": 28
     },
     {
       "name": "Barra cereales Proteínas Veganas 25g",
@@ -402,7 +342,7 @@
       ],
       "img": "img/3965.webp",
       "desc": "Caja x 12u",
-      "order": 34
+      "order": 29
     },
     {
       "name": "Barra cereales Frutilla y Choco Blanco 25g",
@@ -414,7 +354,7 @@
       ],
       "img": "img/3992.webp",
       "desc": "Caja x 12u",
-      "order": 35
+      "order": 30
     },
     {
       "name": "Barra cereal chocolate",
@@ -424,7 +364,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2072.webp",
-      "order": 36
+      "order": 31
     },
     {
       "name": "Barra cereal maní tostado",
@@ -434,7 +374,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2073.webp",
-      "order": 37
+      "order": 32
     },
     {
       "name": "Barra cereal pasas de uva",
@@ -444,7 +384,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2074.webp",
-      "order": 38
+      "order": 33
     },
     {
       "name": "Barra cereal almendras",
@@ -454,7 +394,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2061.webp",
-      "order": 39
+      "order": 34
     },
     {
       "name": "Barra cereal surtidas",
@@ -464,7 +404,19 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2059.webp",
-      "order": 40
+      "order": 35
+    },
+    {
+      "name": "Rebozador gourmet crocante",
+      "unitPrice": 148,
+      "boxPrice": 1776,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4831.webp",
+      "desc": "Caja x 12 350g",
+      "order": 36
     },
     {
       "name": "Barra cereal maní sin azúcar",
@@ -476,7 +428,19 @@
         "azucar"
       ],
       "img": "img/6594.webp",
-      "order": 41
+      "order": 37
+    },
+    {
+      "name": "Rebozador crocante saborizado",
+      "unitPrice": 148,
+      "boxPrice": 1776,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/4832.webp",
+      "desc": "Caja x 12 350g",
+      "order": 38
     },
     {
       "name": "Barra cereal pasas sin azúcar",
@@ -488,7 +452,19 @@
         "azucar"
       ],
       "img": "img/6595.webp",
-      "order": 42
+      "order": 39
+    },
+    {
+      "name": "Pan de molde blanco sin gluten",
+      "unitPrice": 229,
+      "boxPrice": 1832,
+      "unitsPerBox": 8,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6674.webp",
+      "desc": "Caja x 8 350g",
+      "order": 40
     },
     {
       "name": "Barra cereal surtidas sin azúcar",
@@ -500,6 +476,30 @@
         "azucar"
       ],
       "img": "img/6596.webp",
+      "order": 41
+    },
+    {
+      "name": "Budín vainilla sin gluten",
+      "unitPrice": 195,
+      "boxPrice": 2340,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/6675.webp",
+      "desc": "Caja x 12 250g",
+      "order": 42
+    },
+    {
+      "name": "Bizcochuelo vainilla sin gluten",
+      "unitPrice": 59,
+      "boxPrice": 708,
+      "unitsPerBox": 12,
+      "tags": [
+        "gluten"
+      ],
+      "img": "img/10635.webp",
+      "desc": "Caja x 12 200g",
       "order": 43
     }
   ]
