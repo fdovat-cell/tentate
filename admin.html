@@ -44,7 +44,7 @@
     </div>
   </header>
 
-  <p class="admin-help">Arrastrá las fichas del ☰ para cambiar el orden en que aparecen en la página. Los cambios no se guardan hasta que tocás "Guardar cambios".</p>
+  <p class="admin-help">Escribí el número de orden que querés en cada producto y presioná Enter (o tocá afuera) — el producto salta a esa posición solo. Los cambios no se guardan hasta que tocás "Guardar cambios".</p>
 
   <div id="productList" class="product-list"></div>
 </div>
@@ -135,7 +135,6 @@ let sha = null;        // hash del archivo data.json en GitHub, necesario para p
 let products = [];     // productos cargados en memoria
 let dirty = false;     // si hay cambios sin guardar
 let editingId = null;  // producto que se está editando (null = nuevo)
-let draggedEl = null;
 
 const $ = (id) => document.getElementById(id);
 
@@ -238,8 +237,8 @@ function getArticleNumber(p) {
 function renderList() {
   const list = $("productList");
   list.innerHTML = products.map((p, i) => `
-    <div class="product-row" draggable="true" data-index="${i}">
-      <span class="drag-handle">☰</span>
+    <div class="product-row">
+      <input type="number" class="order-input" data-index="${i}" value="${i + 1}" min="1" max="${products.length}">
       <img src="${p.img}" class="row-thumb" alt="">
       <div class="row-info">
         <span class="row-name">${p.name} <span class="row-art">Art. ${getArticleNumber(p)}</span></span>
@@ -253,56 +252,29 @@ function renderList() {
     btn.addEventListener("click", () => openEdit(parseInt(btn.dataset.index, 10)));
   });
 
-  setupDragAndDrop();
+  list.querySelectorAll(".order-input").forEach(input => {
+    input.addEventListener("change", () => moveToPosition(parseInt(input.dataset.index, 10), input.value));
+    input.addEventListener("keydown", e => { if (e.key === "Enter") input.blur(); });
+  });
 }
 
 function tagLabel(t) {
   return t === "gluten" ? "Sin Gluten" : t === "azucar" ? "Sin Azúcar" : t === "vegano" ? "Vegano" : t;
 }
 
-/* ---------- DRAG & DROP PARA REORDENAR ---------- */
-function setupDragAndDrop() {
-  const rows = document.querySelectorAll(".product-row");
-  rows.forEach(row => {
-    row.addEventListener("dragstart", () => {
-      draggedEl = row;
-      row.classList.add("dragging");
-    });
-    row.addEventListener("dragend", () => {
-      row.classList.remove("dragging");
-      commitNewOrder();
-    });
-    row.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      const list = $("productList");
-      const after = getRowAfter(list, e.clientY);
-      if (after == null) {
-        list.appendChild(draggedEl);
-      } else {
-        list.insertBefore(draggedEl, after);
-      }
-    });
-  });
-}
+/* ---------- REORDENAR POR NÚMERO ---------- */
+function moveToPosition(currentIndex, newPositionRaw) {
+  let newPosition = parseInt(newPositionRaw, 10);
+  if (isNaN(newPosition)) { renderList(); return; }
 
-function getRowAfter(container, y) {
-  const rows = [...container.querySelectorAll(".product-row:not(.dragging)")];
-  return rows.reduce((closest, row) => {
-    const box = row.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-    if (offset < 0 && offset > closest.offset) {
-      return { offset, element: row };
-    }
-    return closest;
-  }, { offset: -Infinity }).element;
-}
+  newPosition = Math.max(1, Math.min(products.length, newPosition));
+  const newIndex = newPosition - 1;
 
-function commitNewOrder() {
-  const newOrderIds = [...document.querySelectorAll(".product-row")].map(r => parseInt(r.dataset.index, 10));
-  // data-index quedó desactualizado tras el drag, reconstruimos products por posición real en el DOM
-  const rows = [...document.querySelectorAll(".product-row")];
-  const nameOrder = rows.map(r => r.querySelector(".row-name").textContent);
-  products.sort((a, b) => nameOrder.indexOf(a.name) - nameOrder.indexOf(b.name));
+  if (newIndex === currentIndex) { renderList(); return; }
+
+  const [moved] = products.splice(currentIndex, 1);
+  products.splice(newIndex, 0, moved);
+
   dirty = true;
   renderList();
   setStatus("Orden cambiado · falta guardar", true);
@@ -746,12 +718,22 @@ h1 span { color: var(--stamp-red); }
   border: 2px solid var(--ink);
   border-radius: 8px;
   padding: 10px 12px;
-  cursor: grab;
 }
 
-.product-row.dragging { opacity: 0.4; }
+.order-input {
+  width: 44px;
+  height: 36px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 14px;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--kraft-dark);
+  color: var(--ink);
+  flex-shrink: 0;
+}
 
-.drag-handle { font-size: 18px; color: var(--ink-soft); }
+.order-input:focus { outline: 2px solid var(--mustard); }
 
 .row-thumb {
   width: 44px;
