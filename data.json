@@ -93,6 +93,18 @@
       "order": 8
     },
     {
+      "name": "Alfajor de almendras & castañas de cajú sin azúcares agregados y vegano  relleno con mantequilla de maní, cubierto con baño de repostería semi  amargo 70gs. (ALMENDRAS MANÍ)  Producto sin octogonos",
+      "unitPrice": 71.88,
+      "boxPrice": 575,
+      "unitsPerBox": 8,
+      "desc": "caja x 8u",
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/1009.webp",
+      "order": 9
+    },
+    {
       "name": "Bombita dulce de leche bañado chocolate",
       "unitPrice": 21,
       "boxPrice": 504,
@@ -102,7 +114,7 @@
       ],
       "img": "img/6621.webp",
       "desc": "Display x 24u 30g",
-      "order": 9
+      "order": 10
     },
     {
       "name": "Alfajor maizena s/glúten 70gr",
@@ -114,7 +126,7 @@
       ],
       "img": "img/2180.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 10
+      "order": 11
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -126,7 +138,7 @@
       ],
       "img": "img/2128.webp",
       "desc": "Display x 12u 70g",
-      "order": 11
+      "order": 12
     },
     {
       "name": "Rebozador clásico",
@@ -138,7 +150,7 @@
       ],
       "img": "img/4830.webp",
       "desc": "Caja x 12 350g",
-      "order": 12
+      "order": 13
     },
     {
       "name": "Alfajor bañado c/choc blanco s/gluten",
@@ -150,7 +162,7 @@
       ],
       "img": "img/2179.webp",
       "desc": "CAJA X 6 U. 70GR",
-      "order": 13
+      "order": 14
     },
     {
       "name": "Budín Marmolado Zero Azúcar 250g",
@@ -162,7 +174,7 @@
       ],
       "img": "img/3838.webp",
       "desc": "Caja x 10",
-      "order": 14
+      "order": 15
     },
     {
       "name": "Budín Coco Zero Azúcar 250g",
@@ -174,7 +186,7 @@
       ],
       "img": "img/4037.webp",
       "desc": "Caja x 10",
-      "order": 15
+      "order": 16
     },
     {
       "name": "Budín Chocolate Zero Azúcar 250g",
@@ -186,7 +198,7 @@
       ],
       "img": "img/3837.webp",
       "desc": "Caja x 10",
-      "order": 16
+      "order": 17
     },
     {
       "name": "Budín Naranja Zero Azúcar 250g",
@@ -198,7 +210,7 @@
       ],
       "img": "img/3839.webp",
       "desc": "Caja x 10",
-      "order": 17
+      "order": 18
     },
     {
       "name": "Galletas Smams Chips Chocolate SIN AZÚCAR 150g",
@@ -210,7 +222,7 @@
       ],
       "img": "img/4781.webp",
       "desc": "Caja x 24u",
-      "order": 18
+      "order": 19
     },
     {
       "name": "Galletas Smams Chips Chocolate SIN GLUTEN 150g",
@@ -222,7 +234,7 @@
       ],
       "img": "img/4661.webp",
       "desc": "Caja x 24u",
-      "order": 19
+      "order": 20
     },
     {
       "name": "Galletas Smams Chocolate Rellena Vainilla SIN GLUTEN 105g",
@@ -234,7 +246,7 @@
       ],
       "img": "img/4665.webp",
       "desc": "Caja x 18u",
-      "order": 20
+      "order": 21
     },
     {
       "name": "Galletas Smams Crackers Clásica SIN GLUTEN 150g",
@@ -246,7 +258,7 @@
       ],
       "img": "img/4662.webp",
       "desc": "Caja x 18u",
-      "order": 21
+      "order": 22
     },
     {
       "name": "Galletas Smams Rellena Vainilla SIN GLUTEN 105g",
@@ -258,7 +270,7 @@
       ],
       "img": "img/4659.webp",
       "desc": "Caja x 18u",
-      "order": 22
+      "order": 23
     },
     {
       "name": "Galletas Smams Rellenas Frutilla SIN GLUTEN 105g",
@@ -270,7 +282,7 @@
       ],
       "img": "img/4660.webp",
       "desc": "Caja x 18u",
-      "order": 23
+      "order": 24
     },
     {
       "name": "Polvorón Smams vainilla SIN AZÚCAR 115g",
@@ -282,7 +294,7 @@
       ],
       "img": "img/4783.webp",
       "desc": "Caja x 24u",
-      "order": 24
+      "order": 25
     },
     {
       "name": "Barra cereales Frutos Secos 25g",
@@ -292,7 +304,7 @@
       "tags": [],
       "img": "img/3541.webp",
       "desc": "Caja x 12u",
-      "order": 25
+      "order": 26
     },
     {
       "name": "Barra cereales Coco 25g",
@@ -304,7 +316,7 @@
       ],
       "img": "img/3551.webp",
       "desc": "Caja x 12u",
-      "order": 26
+      "order": 27
     },
     {
       "name": "Barra cereales Chocolate 25g",
@@ -316,7 +328,7 @@
       ],
       "img": "img/3540.webp",
       "desc": "Caja x 12u",
-      "order": 27
+      "order": 28
     },
     {
       "name": "Barra cereales Semillas 25g",
@@ -328,7 +340,7 @@
       ],
       "img": "img/3543.webp",
       "desc": "Caja x 12u",
-      "order": 28
+      "order": 29
     },
     {
       "name": "Barra cereales Goji y Cranberry 25g",
@@ -340,7 +352,7 @@
       ],
       "img": "img/3586.webp",
       "desc": "Caja x 12u",
-      "order": 29
+      "order": 30
     },
     {
       "name": "Barra cereales Proteínas Veganas 25g",
@@ -352,7 +364,7 @@
       ],
       "img": "img/3965.webp",
       "desc": "Caja x 12u",
-      "order": 30
+      "order": 31
     },
     {
       "name": "Barra cereales Frutilla y Choco Blanco 25g",
@@ -364,7 +376,7 @@
       ],
       "img": "img/3992.webp",
       "desc": "Caja x 12u",
-      "order": 31
+      "order": 32
     },
     {
       "name": "Barra cereal chocolate",
@@ -374,7 +386,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2072.webp",
-      "order": 32
+      "order": 33
     },
     {
       "name": "Barra cereal maní tostado",
@@ -384,7 +396,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2073.webp",
-      "order": 33
+      "order": 34
     },
     {
       "name": "Barra cereal pasas de uva",
@@ -394,7 +406,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2074.webp",
-      "order": 34
+      "order": 35
     },
     {
       "name": "Barra cereal almendras",
@@ -404,7 +416,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2061.webp",
-      "order": 35
+      "order": 36
     },
     {
       "name": "Barra cereal surtidas",
@@ -414,7 +426,7 @@
       "desc": "Display x 16 u",
       "tags": [],
       "img": "img/2059.webp",
-      "order": 36
+      "order": 37
     },
     {
       "name": "Rebozador gourmet crocante",
@@ -426,7 +438,7 @@
       ],
       "img": "img/4831.webp",
       "desc": "Caja x 12 350g",
-      "order": 37
+      "order": 38
     },
     {
       "name": "Barra cereal maní sin azúcar",
@@ -438,7 +450,7 @@
         "azucar"
       ],
       "img": "img/6594.webp",
-      "order": 38
+      "order": 39
     },
     {
       "name": "Rebozador crocante saborizado",
@@ -450,7 +462,7 @@
       ],
       "img": "img/4832.webp",
       "desc": "Caja x 12 350g",
-      "order": 39
+      "order": 40
     },
     {
       "name": "Barra cereal pasas sin azúcar",
@@ -462,7 +474,7 @@
         "azucar"
       ],
       "img": "img/6595.webp",
-      "order": 40
+      "order": 41
     },
     {
       "name": "Pan de molde blanco sin gluten",
@@ -474,7 +486,7 @@
       ],
       "img": "img/6674.webp",
       "desc": "Caja x 8 350g",
-      "order": 41
+      "order": 42
     },
     {
       "name": "Barra cereal surtidas sin azúcar",
@@ -486,7 +498,7 @@
         "azucar"
       ],
       "img": "img/6596.webp",
-      "order": 42
+      "order": 43
     },
     {
       "name": "Budín vainilla sin gluten",
@@ -498,7 +510,7 @@
       ],
       "img": "img/6675.webp",
       "desc": "Caja x 12 250g",
-      "order": 43
+      "order": 44
     },
     {
       "name": "Bizcochuelo vainilla sin gluten",
@@ -510,7 +522,7 @@
       ],
       "img": "img/10635.webp",
       "desc": "Caja x 12 200g",
-      "order": 44
+      "order": 45
     },
     {
       "name": "Alfajor Maicena 70g",
@@ -520,7 +532,7 @@
       "desc": "Bandeja x 21",
       "tags": [],
       "img": "img/9100.webp",
-      "order": 45
+      "order": 46
     },
     {
       "name": "Alfajor Maicena Chica 45g",
@@ -530,7 +542,7 @@
       "desc": "Bandeja x 21",
       "tags": [],
       "img": "img/9104.webp",
-      "order": 46
+      "order": 47
     },
     {
       "name": "Alfajor Maizena Bañada 75g",
@@ -540,7 +552,7 @@
       "desc": "Bandeja x 15 u",
       "tags": [],
       "img": "img/9103.webp",
-      "order": 47
+      "order": 48
     },
     {
       "name": "Alfajor Nieve 85g",
@@ -550,7 +562,7 @@
       "desc": "Caja x 12",
       "tags": [],
       "img": "img/9192.webp",
-      "order": 48
+      "order": 49
     },
     {
       "name": "Alfajor de Maní",
@@ -560,7 +572,7 @@
       "desc": "Caja x 12",
       "tags": [],
       "img": "img/9194.webp",
-      "order": 49
+      "order": 50
     },
     {
       "name": "Alfajor Negrito 50g",
@@ -570,7 +582,7 @@
       "desc": "Bandeja x 21",
       "tags": [],
       "img": "img/9116.webp",
-      "order": 50
+      "order": 51
     },
     {
       "name": "Espejito 70g",
@@ -580,7 +592,7 @@
       "desc": "Caja x 18",
       "tags": [],
       "img": "img/9150.webp",
-      "order": 51
+      "order": 52
     },
     {
       "name": "Yoyo 85g",
@@ -590,7 +602,7 @@
       "desc": "Caja x 12",
       "tags": [],
       "img": "img/9154.webp",
-      "order": 52
+      "order": 53
     },
     {
       "name": "Alfajor relleno dulce de leche sabor limón",
@@ -600,7 +612,7 @@
       "desc": "caja x 12 u.",
       "tags": [],
       "img": "img/1015.webp",
-      "order": 53
+      "order": 54
     },
     {
       "name": "Alfajor Maizena ch x 21 u",
@@ -610,7 +622,39 @@
       "desc": "caja x 21 u",
       "tags": [],
       "img": "img/9104.webp",
-      "order": 54
+      "order": 55
+    },
+    {
+      "name": "Alfajor de semillas y frutos secos relleno con mantequilla de maní, cubierto  con baño de repostería semi amargo 70gs. (VEGANO)",
+      "unitPrice": 71.88,
+      "boxPrice": 575,
+      "unitsPerBox": 8,
+      "desc": "caja x 8 u",
+      "tags": [],
+      "img": "img/1007.webp",
+      "order": 56
+    },
+    {
+      "name": "Alfajor de almendras & castañas de cajú sin azúcares agregados relleno  con dulce de leche, cubierto con baño de repostería semi amargo 70gs.  (ALMENDRAS DDL) Producto sin octogonos",
+      "unitPrice": 71.88,
+      "boxPrice": 575,
+      "unitsPerBox": 8,
+      "desc": "caja x 8 u.",
+      "tags": [
+        "azucar"
+      ],
+      "img": "img/1008.webp",
+      "order": 57
+    },
+    {
+      "name": "Alfajor de semillas y fruos secos relleno con dulce de leche, cubierto con  baño de reposteria semi amargo 70gs. (ORIGINAL)",
+      "unitPrice": 56.88,
+      "boxPrice": 455,
+      "unitsPerBox": 8,
+      "desc": "caja x 8 u.",
+      "tags": [],
+      "img": "img/1005.webp",
+      "order": 58
     }
   ]
 }
