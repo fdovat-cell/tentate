@@ -37,6 +37,7 @@
     <h1>TENTATE<span>!</span> <small>admin</small></h1>
     <div class="admin-actions">
       <span id="statusMsg" class="status-msg"></span>
+      <button id="importBtn" class="btn-secondary">⇩ Importar de PelSAS</button>
       <button id="addProductBtn" class="btn-secondary">+ Nuevo producto</button>
       <button id="saveBtn" class="btn-primary">Guardar cambios</button>
       <button id="logoutBtn" class="btn-ghost">Salir</button>
@@ -90,6 +91,29 @@
       <div class="edit-footer">
         <button id="deleteProductBtn" class="btn-danger">Eliminar producto</button>
         <button id="confirmEditBtn" class="btn-primary">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE IMPORTACIÓN DESDE PELSAS -->
+<div id="importOverlay" class="edit-overlay">
+  <div class="edit-box import-box">
+    <div class="edit-head">
+      <span>Importar de PelSAS</span>
+      <button id="closeImportBtn" class="edit-close">✕</button>
+    </div>
+    <div class="edit-body">
+      <label class="field-label">Marca</label>
+      <select id="importBrandSelect" class="field-input">
+        <option value="">Cargando marcas...</option>
+      </select>
+
+      <div id="importProductList" class="import-product-list"></div>
+
+      <div class="edit-footer">
+        <span id="importSelectedCount" class="status-msg">0 seleccionados</span>
+        <button id="confirmImportBtn" class="btn-primary">Importar seleccionados</button>
       </div>
     </div>
   </div>
@@ -359,6 +383,189 @@ function deleteProduct() {
   setStatus("Cambios sin guardar", true);
 }
 
+/* ============================================================
+   IMPORTADOR DESDE PELSAS-DISTRIBUIDORA
+   El repo de PelSAS es público, así que se lee directo sin token.
+   Las fotos SÍ se copian a este repo (tentate) usando tu token,
+   porque son un archivo nuevo que hay que crear acá.
+   ============================================================ */
+const PELSAS_DATA_URL = "https://raw.githubusercontent.com/fdovat-cell/pelsas-distribuidora/main/data.json";
+const PELSAS_IMG_BASE = "https://raw.githubusercontent.com/fdovat-cell/pelsas-distribuidora/main/img/";
+
+let pelsasData = null;       // { brands, products } tal cual vienen de PelSAS
+let importSelection = new Set(); // ids de productos de pelsas tildados para importar
+
+$("importBtn").addEventListener("click", openImportModal);
+$("closeImportBtn").addEventListener("click", closeImportModal);
+$("confirmImportBtn").addEventListener("click", runImport);
+
+async function openImportModal() {
+  $("importOverlay").classList.add("visible");
+  importSelection.clear();
+  updateImportCount();
+
+  if (pelsasData) { renderBrandOptions(); return; }
+
+  $("importBrandSelect").innerHTML = `<option value="">Cargando marcas...</option>`;
+  try {
+    const res = await fetch(PELSAS_DATA_URL);
+    if (!res.ok) throw new Error(`PelSAS respondió ${res.status}`);
+    pelsasData = await res.json();
+    renderBrandOptions();
+  } catch (e) {
+    console.error(e);
+    $("importBrandSelect").innerHTML = `<option value="">⚠️ Error al cargar</option>`;
+  }
+}
+
+function closeImportModal() {
+  $("importOverlay").classList.remove("visible");
+}
+
+function renderBrandOptions() {
+  const select = $("importBrandSelect");
+  const brands = (pelsasData.brands || []).filter(b => b.activo !== false);
+  select.innerHTML = `<option value="">Elegí una marca...</option>` +
+    brands.map(b => `<option value="${b.id}">${b.name}${b.desc ? " — " + b.desc : ""}</option>`).join("");
+
+  select.onchange = () => renderImportProductList(select.value);
+  $("importProductList").innerHTML = "";
+}
+
+function pelsasArt(p) {
+  return String(p.art);
+}
+
+function alreadyImported(art) {
+  return products.some(p => (p.img || "").includes(`/${art}.webp`) || (p.img || "") === `img/${art}.webp`);
+}
+
+function unitsFromPresent(present) {
+  const m = (present || "").match(/[xX]\s*(\d+)/);
+  return m ? parseInt(m[1], 10) : 1;
+}
+
+function renderImportProductList(brandId) {
+  const list = $("importProductList");
+  if (!brandId) { list.innerHTML = ""; return; }
+
+  const brandProducts = (pelsasData.products[brandId] || []);
+  if (brandProducts.length === 0) {
+    list.innerHTML = `<p class="empty-msg">Esta marca no tiene productos.</p>`;
+    return;
+  }
+
+  list.innerHTML = brandProducts.map(p => {
+    const art = pelsasArt(p);
+    const imported = alreadyImported(art);
+    const checked = importSelection.has(art);
+    return `
+      <label class="import-row ${imported ? "imported" : ""}">
+        <input type="checkbox" data-art="${art}" ${imported ? "disabled" : ""} ${checked ? "checked" : ""}>
+        <img src="${PELSAS_IMG_BASE}${art}.webp" class="row-thumb" alt="" loading="lazy">
+        <div class="row-info">
+          <span class="row-name">${p.name}</span>
+          <span class="row-meta">$${p.caja} caja · ${p.present || ""}${imported ? " · Ya importado" : ""}</span>
+        </div>
+      </label>
+    `;
+  }).join("");
+
+  list.querySelectorAll('input[type="checkbox"]:not([disabled])').forEach(chk => {
+    chk.addEventListener("change", () => {
+      const art = chk.dataset.art;
+      if (chk.checked) importSelection.add(art); else importSelection.delete(art);
+      updateImportCount();
+    });
+  });
+}
+
+function updateImportCount() {
+  $("importSelectedCount").textContent = `${importSelection.size} seleccionado${importSelection.size === 1 ? "" : "s"}`;
+}
+
+async function runImport() {
+  if (importSelection.size === 0) { alert("Tildá al menos un producto para importar."); return; }
+
+  const brandId = $("importBrandSelect").value;
+  const brandProducts = pelsasData.products[brandId] || [];
+  const toImport = brandProducts.filter(p => importSelection.has(pelsasArt(p)));
+
+  const token = sessionStorage.getItem("tentate_gh_token");
+  setStatus(`Importando 0/${toImport.length}...`);
+
+  let done = 0;
+  for (const p of toImport) {
+    const art = pelsasArt(p);
+    try {
+      await copyImageToTentate(art, token);
+      products.push({
+        name: p.name,
+        unitPrice: p.unit,
+        boxPrice: p.caja,
+        unitsPerBox: unitsFromPresent(p.present),
+        desc: p.present || "",
+        tags: [],
+        img: `img/${art}.webp`,
+        order: products.length + 1
+      });
+      done++;
+      setStatus(`Importando ${done}/${toImport.length}...`);
+    } catch (e) {
+      console.error("Error importando", p.name, e);
+      setStatus(`⚠️ Error con "${p.name}": ${e.message}`, true);
+    }
+  }
+
+  dirty = true;
+  renderList();
+  closeImportModal();
+  setStatus(`✓ ${done} producto${done === 1 ? "" : "s"} importado${done === 1 ? "" : "s"} · falta Guardar cambios`, true);
+}
+
+async function copyImageToTentate(art, token) {
+  const path = `img/${art}.webp`;
+
+  // ¿ya existe esa foto en tentate? si sí, no la volvemos a subir
+  const existsRes = await fetch(
+    `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${path}?ref=${CONFIG.BRANCH}`,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+  if (existsRes.ok) return; // ya está, no hace falta subirla de nuevo
+
+  const imgRes = await fetch(`${PELSAS_IMG_BASE}${art}.webp`);
+  if (!imgRes.ok) throw new Error("no se encontró la foto en PelSAS");
+  const buffer = await imgRes.arrayBuffer();
+  const base64 = arrayBufferToBase64(buffer);
+
+  const putRes = await fetch(
+    `https://api.github.com/repos/${CONFIG.REPO_OWNER}/${CONFIG.REPO_NAME}/contents/${path}`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: `Importar foto ${art} desde PelSAS`,
+        content: base64,
+        branch: CONFIG.BRANCH
+      })
+    }
+  );
+  if (!putRes.ok) {
+    const err = await putRes.json().catch(() => ({}));
+    throw new Error(err.message || `no se pudo subir la foto (${putRes.status})`);
+  }
+}
+
+function arrayBufferToBase64(buffer) {
+  let binary = "";
+  const bytes = new Uint8Array(buffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
 /* ---------- LOGOUT ---------- */
 $("logoutBtn").addEventListener("click", () => {
   if (dirty && !confirm("Tenés cambios sin guardar. ¿Salir igual?")) return;
@@ -622,6 +829,47 @@ h1 span { color: var(--stamp-red); }
 }
 
 .edit-footer .btn-primary { margin-top: 0; width: auto; flex: 1; }
+
+/* IMPORTADOR DESDE PELSAS */
+.import-box { max-width: 560px; }
+
+.import-product-list {
+  margin-top: 14px;
+  max-height: 320px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.import-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--kraft-dark);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.import-row.imported {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.import-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.empty-msg {
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 13px;
+  padding: 20px 10px;
+}
 </style>
 </body>
 </html>
