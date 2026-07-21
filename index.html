@@ -37,6 +37,7 @@
     <button type="button" class="search-clear" id="searchClear" aria-label="Limpiar búsqueda">✕</button>
   </div>
 </div>
+<div class="search-bar-spacer"></div>
 
 <!-- BOTÓN DE FILTRO ÚNICO -->
 <div class="filter-bar" id="filterBar"></div>
@@ -63,7 +64,6 @@
   </div>
 </section>
 
-<p class="provenance-note">Seleccionado y distribuido por PelSAS Distribuidora</p>
 
 <footer class="foot">
   <p>Un servicio de PelSAS Distribuidora — Montevideo</p>
@@ -360,7 +360,15 @@ function initCoverflow(catId, items) {
 
   dotsContainer.innerHTML = items.map((_, i) => `<div class="cf-dot"></div>`).join("");
 
+  function spacing() {
+    const w = window.innerWidth;
+    if (w >= 1000) return { x: 220, z: 190 };
+    if (w >= 700) return { x: 175, z: 150 };
+    return { x: 85, z: 75 };
+  }
+
   function updatePositions() {
+    const sp = spacing();
     cards.forEach((card, i) => {
       let offset = i - current;
       if (offset > total / 2) offset -= total;
@@ -370,14 +378,14 @@ function initCoverflow(catId, items) {
       if (absOffset > VISIBLE_SIDE) {
         card.style.opacity = "0";
         card.style.pointerEvents = "none";
-        card.style.transform = `translateX(${offset > 0 ? 260 : -260}px) translateZ(-300px)`;
+        card.style.transform = `translateX(${offset > 0 ? sp.x * 3 : -sp.x * 3}px) translateZ(-300px)`;
         card.classList.remove("is-center");
         return;
       }
 
       card.style.pointerEvents = "auto";
-      const translateX = offset * 85;
-      const translateZ = -absOffset * 75;
+      const translateX = offset * sp.x;
+      const translateZ = -absOffset * sp.z;
       const rotateY = offset * -30;
       const scale = 1 - absOffset * 0.16;
       const opacity = 1 - absOffset * 0.28;
@@ -665,6 +673,10 @@ document.getElementById("backToTop").addEventListener("click", () => {
 
 loadProducts();
 
+window.addEventListener("resize", () => {
+  cfRedraws.forEach(fn => fn());
+});
+
 document.getElementById("openCartBtn").addEventListener("click", openCart);
 document.getElementById("closeCartBtn").addEventListener("click", closeCart);
 document.getElementById("cartOverlay").addEventListener("click", (e) => {
@@ -788,16 +800,24 @@ body {
   margin: -10px 0 30px;
 }
 
-/* BUSCADOR */
+/* BUSCADOR — flotante fijo arriba de la pantalla (position:sticky no
+   funciona acá porque el body tiene overflow-x:hidden, necesario para
+   los carruseles) */
 .search-bar {
   max-width: 500px;
-  margin: 0 auto 14px;
+  margin: 0 auto;
   padding: 10px 16px;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 20;
+  left: 0;
+  right: 0;
+  z-index: 50;
   background: var(--kraft);
-  position: -webkit-sticky;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+}
+
+.search-bar-spacer {
+  height: 66px;
 }
 
 .search-bar-inner {
@@ -1078,22 +1098,32 @@ body {
 
 /* pantallas más grandes: cards más grandes y más separadas */
 @media (min-width: 700px) {
-  .cf-wrap { height: 320px; }
-  .cf-card { width: 210px; height: 260px; margin: -140px 0 0 -105px; }
-  .cf-photo { height: 155px; }
-  .cf-name { font-size: 14px; }
-  .cf-price { font-size: 15px; }
+  .cf-wrap { height: 380px; }
+  .cf-card { width: 250px; height: 310px; margin: -165px 0 0 -125px; }
+  .cf-photo { height: 190px; }
+  .cf-name { font-size: 15px; }
+  .cf-price { font-size: 16px; }
+  .destacado-title { font-size: 18px; margin: 30px 0 8px; }
+  .cf-quickadd { width: 30px; height: 30px; font-size: 19px; }
 }
 
-/* MODAL "DETALLE DE PRODUCTO" — mismo lenguaje visual que el ticket de pedido */
+@media (min-width: 1000px) {
+  .cf-wrap { height: 440px; }
+  .cf-card { width: 290px; height: 360px; margin: -190px 0 0 -145px; }
+  .cf-photo { height: 220px; }
+}
+
+/* MODAL "DETALLE DE PRODUCTO" — card centrada con aire alrededor,
+   no pegada abajo, para que no quede cortada por el navegador en celular */
 .product-overlay {
   position: fixed;
   inset: 0;
   background: rgba(43,38,32,0.55);
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
-  z-index: 40;
+  padding: 20px;
+  z-index: 55;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
@@ -1108,18 +1138,19 @@ body {
   position: relative;
   background: var(--card-bg);
   width: 100%;
-  max-width: 420px;
-  max-height: 86vh;
+  max-width: 400px;
+  max-height: 80vh;
+  max-height: 80dvh;
   overflow-y: auto;
-  border-radius: 16px 16px 0 0;
+  border-radius: 16px;
   border: 2px solid var(--ink);
-  border-bottom: none;
-  padding: 20px 18px 18px;
-  transform: translateY(20px);
-  transition: transform 0.2s ease;
+  padding: 20px 18px 22px;
+  transform: scale(0.95);
+  opacity: 0;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.product-overlay.visible .product-ticket { transform: translateY(0); }
+.product-overlay.visible .product-ticket { transform: scale(1); opacity: 1; }
 
 .product-ticket .ticket-close {
   position: absolute;
@@ -1134,7 +1165,7 @@ body {
 
 .pt-photo {
   position: relative;
-  height: 180px;
+  height: 160px;
   background: var(--kraft-dark);
   border: 2px solid var(--ink);
   border-radius: 8px;
@@ -1147,6 +1178,11 @@ body {
   height: 100%;
   object-fit: contain;
   padding: 10px;
+}
+
+@media (max-height: 700px) {
+  .pt-photo { height: 120px; margin-bottom: 10px; }
+  .product-ticket { padding: 18px 16px 18px; }
 }
 
 .pt-name {
@@ -1571,7 +1607,7 @@ body {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  z-index: 30;
+  z-index: 60;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
