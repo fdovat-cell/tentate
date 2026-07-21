@@ -109,6 +109,14 @@
   </div>
 </div>
 
+<!-- MODAL "DETALLE DE PRODUCTO" (se abre al tocar una ficha del carrusel) -->
+<div class="product-overlay" id="productOverlay">
+  <div class="product-ticket" id="productTicket">
+    <button class="ticket-close" id="closeProductBtn">✕</button>
+    <div id="productTicketBody"></div>
+  </div>
+</div>
+
 <script>
 /* ============================================================
    📦 LISTA DE PRODUCTOS — EDITÁ ACÁ
@@ -173,14 +181,15 @@ function findProduct(name) {
   return PRODUCTS.find(p => p.name === name);
 }
 
-let cfRedraws = []; // funciones "draw" de cada carrusel destacado, para refrescar sus badges de cantidad
+let cfRedraws = []; // funciones "updatePositions" de cada carrusel, para refrescar posiciones si hiciera falta
+let cfBadgeUpdaters = []; // (se re-declara acá por orden de lectura; la real vive más abajo junto al coverflow)
 
 function addToCart(name) {
   cart[name] = (cart[name] || 0) + 1;
   saveCart();
   renderList();
   renderCart();
-  cfRedraws.forEach(fn => fn());
+  cfBadgeUpdaters.forEach(fn => fn());
 }
 
 function changeQty(name, delta) {
@@ -193,7 +202,7 @@ function changeQty(name, delta) {
   saveCart();
   renderList();
   renderCart();
-  cfRedraws.forEach(fn => fn());
+  cfBadgeUpdaters.forEach(fn => fn());
 }
 
 function cartCount() {
@@ -293,9 +302,12 @@ const DESTACADOS_CATS = [
   { id: "dc", title: "Sin Culpa",   filter: p => (p.tags || []).length === 0 || (p.tags || []).includes("vegano") }
 ];
 
+let popupOpen = false; // pausa la auto-rotación de todos los carruseles mientras hay un popup de producto abierto
+
 function renderDestacados() {
   const container = document.getElementById("destacados");
   cfRedraws = [];
+  cfBadgeUpdaters = [];
 
   const blocks = DESTACADOS_CATS
     .map(cat => ({ cat, items: PRODUCTS.filter(cat.filter) }))
@@ -316,12 +328,13 @@ function cfCardHTML(p) {
   const qty = cart[p.name] || 0;
   return `
     <div class="cf-card" data-name="${p.name}">
+      <button class="cf-quickadd" data-name="${p.name}" aria-label="Agregar">+</button>
       <div class="cf-photo">
         <img src="${p.img}" alt="${p.name}" loading="lazy">
         <div class="cf-stamps">
           ${(p.tags || []).map(t => `<span class="cf-stamp ${TAG_LABELS[t].cls}">${TAG_LABELS[t].label}</span>`).join("")}
         </div>
-        ${qty > 0 ? `<span class="cf-badge">${qty}</span>` : ""}
+        <span class="cf-badge" style="display:${qty > 0 ? "flex" : "none"}">${qty}</span>
       </div>
       <div class="cf-info">
         <span class="cf-name">${p.name}</span>
@@ -339,13 +352,15 @@ function initCoverflow(catId, items) {
   const VISIBLE_SIDE = 2; // 2 a cada lado + 1 centro = 5 visibles
   let current = 0;
 
-  function draw() {
-    track.innerHTML = items.map(p => cfCardHTML(p)).join("");
-    dotsContainer.innerHTML = items.map((_, i) => `<div class="cf-dot ${i === current ? "active" : ""}"></div>`).join("");
+  // Las cards se crean UNA sola vez acá. Rotar solo cambia sus transforms,
+  // por eso ahora se ven trasladar/girar en vez de "cambiar de foto".
+  track.innerHTML = items.map(p => cfCardHTML(p)).join("");
+  const cards = Array.from(track.querySelectorAll(".cf-card"));
+  const dotsContainerDots = () => dotsContainer.querySelectorAll(".cf-dot");
 
-    const cards = track.querySelectorAll(".cf-card");
-    const dots = dotsContainer.querySelectorAll(".cf-dot");
+  dotsContainer.innerHTML = items.map((_, i) => `<div class="cf-dot"></div>`).join("");
 
+  function updatePositions() {
     cards.forEach((card, i) => {
       let offset = i - current;
       if (offset > total / 2) offset -= total;
@@ -356,6 +371,7 @@ function initCoverflow(catId, items) {
         card.style.opacity = "0";
         card.style.pointerEvents = "none";
         card.style.transform = `translateX(${offset > 0 ? 260 : -260}px) translateZ(-300px)`;
+        card.classList.remove("is-center");
         return;
       }
 
@@ -373,30 +389,50 @@ function initCoverflow(catId, items) {
       card.style.boxShadow = absOffset === 0
         ? "6px 6px 0 rgba(43,38,32,0.22)"
         : "4px 4px 0 rgba(43,38,32,0.15)";
+      card.classList.toggle("is-center", absOffset === 0);
     });
 
-    dots.forEach((d, i) => d.classList.toggle("active", i === current));
+    dotsContainerDots().forEach((d, i) => d.classList.toggle("active", i === current));
+  }
 
-    cards.forEach((card, i) => {
-      card.addEventListener("click", () => {
-        let offset = i - current;
-        if (offset > total / 2) offset -= total;
-        if (offset < -total / 2) offset += total;
-        if (offset !== 0) {
-          goTo(i); // lateral -> rota al centro
-        } else {
-          addToCart(card.dataset.name); // centro -> agrega al pedido
-        }
-      });
+  function updateBadges() {
+    cards.forEach(card => {
+      const p = findProduct(card.dataset.name);
+      const qty = cart[card.dataset.name] || 0;
+      const badge = card.querySelector(".cf-badge");
+      badge.textContent = qty;
+      badge.style.display = qty > 0 ? "flex" : "none";
     });
   }
 
   function goTo(index) {
     current = ((index % total) + total) % total;
-    draw();
+    updatePositions();
   }
   function next() { goTo(current + 1); }
   function prev() { goTo(current - 1); }
+
+  cards.forEach((card, i) => {
+    // click en cualquier parte de la card (menos el +) -> lateral rota al centro, centro abre popup
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".cf-quickadd")) return;
+      let offset = i - current;
+      if (offset > total / 2) offset -= total;
+      if (offset < -total / 2) offset += total;
+      if (offset !== 0) {
+        goTo(i); // lateral -> rota al centro
+      } else {
+        openProductPopup(card.dataset.name); // centro -> abre detalle
+      }
+    });
+
+    // botón "+" rápido: agrega sin abrir popup, sin importar si está centrada o no
+    const quickBtn = card.querySelector(".cf-quickadd");
+    quickBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      addToCart(card.dataset.name);
+    });
+  });
 
   // swipe táctil
   let startX = 0, dragging = false, interacting = false;
@@ -423,12 +459,85 @@ function initCoverflow(catId, items) {
     setTimeout(() => { interacting = false; }, 3000);
   });
 
-  // auto-rotación, se pausa mientras el usuario interactúa
-  setInterval(() => { if (!interacting) next(); }, 2800);
+  // auto-rotación: se pausa mientras el usuario interactúa o hay un popup abierto
+  setInterval(() => { if (!interacting && !popupOpen) next(); }, 2800);
 
-  draw();
-  cfRedraws.push(draw);
+  updatePositions();
+  cfRedraws.push(updatePositions);
+  cfBadgeUpdaters.push(updateBadges);
 }
+
+/* ---------- POPUP DE DETALLE DE PRODUCTO ---------- */
+function productPopupHTML(p) {
+  const qty = cart[p.name] || 0;
+  return `
+    <div class="pt-photo">
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      <div class="stamps">
+        ${(p.tags || []).map(t => `<span class="stamp ${TAG_LABELS[t].cls}">${TAG_LABELS[t].label}</span>`).join("")}
+      </div>
+    </div>
+    <h3 class="pt-name">${p.name}</h3>
+    <p class="pt-desc">${p.desc} <span class="art-number">Art. ${getArticleNumber(p)}</span></p>
+    <p class="pt-unit">Precio unitario: <span>$${p.unitPrice}</span> <em>(informativo)</em></p>
+    <div class="pt-bottom">
+      <div class="box-price-block">
+        <span class="box-label">Caja x${p.unitsPerBox}</span>
+        <span class="card-price">$${p.boxPrice}</span>
+      </div>
+      ${qty === 0
+        ? `<button class="order-btn" id="ptAddBtn">Agregar</button>`
+        : `<div class="card-stepper">
+             <button class="qty-btn" id="ptMinusBtn">−</button>
+             <span class="qty-value" id="ptQtyValue">${qty}</span>
+             <button class="qty-btn" id="ptPlusBtn">+</button>
+           </div>`
+      }
+    </div>
+  `;
+}
+
+function openProductPopup(name) {
+  const p = findProduct(name);
+  if (!p) return;
+  popupOpen = true;
+  renderProductPopup(name);
+  document.getElementById("productOverlay").classList.add("visible");
+}
+
+function renderProductPopup(name) {
+  const p = findProduct(name);
+  if (!p) return;
+  const body = document.getElementById("productTicketBody");
+  body.innerHTML = productPopupHTML(p);
+
+  const addBtn = document.getElementById("ptAddBtn");
+  if (addBtn) addBtn.addEventListener("click", () => {
+    addToCart(name);
+    renderProductPopup(name);
+  });
+
+  const plusBtn = document.getElementById("ptPlusBtn");
+  const minusBtn = document.getElementById("ptMinusBtn");
+  if (plusBtn) plusBtn.addEventListener("click", () => {
+    changeQty(name, 1);
+    renderProductPopup(name);
+  });
+  if (minusBtn) minusBtn.addEventListener("click", () => {
+    changeQty(name, -1);
+    renderProductPopup(name);
+  });
+}
+
+function closeProductPopup() {
+  popupOpen = false;
+  document.getElementById("productOverlay").classList.remove("visible");
+}
+
+document.getElementById("closeProductBtn").addEventListener("click", closeProductPopup);
+document.getElementById("productOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "productOverlay") closeProductPopup();
+});
 
 /* ---------- BOTÓN DE FILTRO ÚNICO ---------- */
 function renderFilterBar() {
@@ -509,8 +618,20 @@ function renderCardHTML(p, i) {
 }
 
 /* ---------- LISTA ÚNICA (con filtro + búsqueda combinados) ---------- */
+/* Por defecto se ven los carruseles destacados. La grilla fija solo
+   aparece si el usuario busca algo o toca el filtro de restricciones. */
 function renderList() {
   const grid = document.getElementById("grid");
+  const destacados = document.getElementById("destacados");
+
+  const showGrid = filterActive || searchTerm.length > 0;
+  grid.classList.toggle("visible", showGrid);
+  destacados.classList.toggle("hidden", showGrid);
+
+  if (!showGrid) {
+    grid.innerHTML = "";
+    return;
+  }
 
   let items = PRODUCTS;
   if (filterActive) {
@@ -926,14 +1047,156 @@ body {
   background: var(--stamp-red);
 }
 
+/* botón "+" rápido, agrega sin abrir el popup */
+.cf-quickadd {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--ink);
+  background: var(--mustard);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cf-quickadd:active { transform: scale(0.9); }
+
+/* degradé en los bordes del carrusel, para insinuar que hay más para el costado */
+.cf-wrap {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, black 60px, black calc(100% - 60px), transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, black 60px, black calc(100% - 60px), transparent 100%);
+}
+
+/* pantallas más grandes: cards más grandes y más separadas */
+@media (min-width: 700px) {
+  .cf-wrap { height: 320px; }
+  .cf-card { width: 210px; height: 260px; margin: -140px 0 0 -105px; }
+  .cf-photo { height: 155px; }
+  .cf-name { font-size: 14px; }
+  .cf-price { font-size: 15px; }
+}
+
+/* MODAL "DETALLE DE PRODUCTO" — mismo lenguaje visual que el ticket de pedido */
+.product-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,38,32,0.55);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.product-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.product-ticket {
+  position: relative;
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 420px;
+  max-height: 86vh;
+  overflow-y: auto;
+  border-radius: 16px 16px 0 0;
+  border: 2px solid var(--ink);
+  border-bottom: none;
+  padding: 20px 18px 18px;
+  transform: translateY(20px);
+  transition: transform 0.2s ease;
+}
+
+.product-overlay.visible .product-ticket { transform: translateY(0); }
+
+.product-ticket .ticket-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  background: var(--card-bg);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.pt-photo {
+  position: relative;
+  height: 180px;
+  background: var(--kraft-dark);
+  border: 2px solid var(--ink);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+
+.pt-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 10px;
+}
+
+.pt-name {
+  font-family: 'Archivo', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  margin: 0 0 4px;
+}
+
+.pt-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 0 0 6px;
+}
+
+.pt-unit {
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin: 0 0 14px;
+}
+
+.pt-unit span {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.pt-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px dashed var(--ink-soft);
+  padding-top: 14px;
+}
+
 /* GRID / LISTA PRINCIPAL */
 .grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 18px;
   padding: 0 16px;
   max-width: 1100px;
   margin: 0 auto;
+}
+
+.grid.visible {
+  display: grid;
+}
+
+.destacados.hidden {
+  display: none;
 }
 
 @media (max-width: 480px) {
